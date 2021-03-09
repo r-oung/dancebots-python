@@ -1,0 +1,4 @@
+# exclude all of the following
+*.mp3
+*.wav
+*.pyc
