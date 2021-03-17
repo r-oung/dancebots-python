@@ -7,13 +7,12 @@ class Protocol:
 	_start_duration = 2.0 # start bit duration [msec]
 	_one_duration = 0.7 # one bit duration [msec]
 	_zero_duration = 0.2 # zero bit duration [msec]
-	_frame_length = 24 # [bits]
 
-	def __init__(self, sample_rate=44100, bpm=2):
+
+	def __init__(self, sample_rate=44100):
 		self.samples = []
 		self.sample_rate = sample_rate
-		self.beat_length = 5 # [msec]
-
+		
 
 	def _start(self):
 		num_samples = int(self._start_duration * (self.sample_rate / 1000.0))
