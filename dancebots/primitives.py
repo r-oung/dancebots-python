@@ -1,126 +1,126 @@
 class Primitives(Move):
-	""" Choreography base class.
+    """Choreography base class.
 
-	This class consists of both motion and LED choreographies.
-	"""
+    This class consists of both motion and LED choreographies.
+    """
 
-	def insert_motion_tandf(self, index, freq, period):
-		"""Moves the robot forwards and backwards repeatedly.
+    def insert_motion_tandf(self, index, freq, period):
+        """Moves the robot forwards and backwards repeatedly.
 
-		Args:
-			index (int): Time index for when to start the dance primitive [sec]
-			freq (float): Frequency in which to operate the dance primitive [Hz]
-			period (int): Length of time in which to operate the dance primitive [sec]
+        Args:
+                index (int): Time index for when to start the dance primitive [sec]
+                freq (float): Frequency in which to operate the dance primitive [Hz]
+                period (int): Length of time in which to operate the dance primitive [sec]
 
-		Returns:
-			None
+        Returns:
+                None
 
-		"""
-		reps = freq * period # number of dance primitive repetitions
+        """
+        reps = freq * period  # number of dance primitive repetitions
 
-		# unit conversion from [sec] to [commands]
-		cmd_index, cmd_period = self.time2cmd(index, freq)
+        # unit conversion from [sec] to [commands]
+        cmd_index, cmd_period = self.time2cmd(index, freq)
 
-		# insert dance primitive
-		for i in range(reps):
-			self.move_forward(cmd_index, int(0.5 * cmd_period))
-			cmd_index += cmd_period
+        # insert dance primitive
+        for i in range(reps):
+            self.move_forward(cmd_index, int(0.5 * cmd_period))
+            cmd_index += cmd_period
 
-			self.move_backward(cmd_index, int(0.5 * cmd_period))
-			cmd_index += cmd_period
+            self.move_backward(cmd_index, int(0.5 * cmd_period))
+            cmd_index += cmd_period
 
-		return 
+        return
 
-	def insert_motion_twist(self, index, freq, period):
-		"""Twists the robot left and right repeatedly.
-		
-		Args:
-			index (int): Time index for when to start the dance primitive [sec]
-			freq (float): Frequency in which to operate the dance primitive [Hz]
-			period (int): Length of time in which to operate the dance primitive [sec]
+    def insert_motion_twist(self, index, freq, period):
+        """Twists the robot left and right repeatedly.
 
-		Returns:
-			None
+        Args:
+                index (int): Time index for when to start the dance primitive [sec]
+                freq (float): Frequency in which to operate the dance primitive [Hz]
+                period (int): Length of time in which to operate the dance primitive [sec]
 
-		"""
-		reps = freq * period # number of dance primitive repetitions
+        Returns:
+                None
 
-		# unit conversion from [sec] to [commands]
-		cmd_index, cmd_period = self.time2cmd(index, freq)
+        """
+        reps = freq * period  # number of dance primitive repetitions
 
-		# insert dance primitive
-		for i in range(reps):
-			self.twist_left(cmd_index, int(0.5 * cmd_period))
-			cmd_index += cmd_period
+        # unit conversion from [sec] to [commands]
+        cmd_index, cmd_period = self.time2cmd(index, freq)
 
-			self.twist_right(cmd_index, int(0.5 * cmd_period))
-			cmd_index += cmd_period
+        # insert dance primitive
+        for i in range(reps):
+            self.twist_left(cmd_index, int(0.5 * cmd_period))
+            cmd_index += cmd_period
 
-		return 
+            self.twist_right(cmd_index, int(0.5 * cmd_period))
+            cmd_index += cmd_period
 
-	def insert_light_pattern_a(self, index, freq, period):
-		"""LEDs change randomly for a set number of repetitions.
-		
-		Args:
-			index (int): Time index for when to start the light pattern [sec]
-			freq (float): Frequency in which to operate the light pattern [Hz]
-			period (int): Length of time in which to operate the dance primitive [sec]
+        return
 
-		Returns:
-			None
+    def insert_light_pattern_a(self, index, freq, period):
+        """LEDs change randomly for a set number of repetitions.
 
-		"""
-		reps = freq * period # number of light pattern repetitions
+        Args:
+                index (int): Time index for when to start the light pattern [sec]
+                freq (float): Frequency in which to operate the light pattern [Hz]
+                period (int): Length of time in which to operate the dance primitive [sec]
 
-		# insert LED pattern
-		for i in range(reps):
-			val = random.getrandbits(8)
-			self.blink_led(index, freq, val, val)
+        Returns:
+                None
 
-		return
+        """
+        reps = freq * period  # number of light pattern repetitions
 
-	def insert_light_pattern_b(self, index, freq, period):
-		"""LEDs change turn on and off for a set number of repetitions.
-		
-		Args:
-			index (int): Time index for when to start the light pattern [sec]
-			freq (float): Frequency in which to operate the light pattern [Hz]
-			period (int): Length of time in which to operate the dance primitive [sec]
+        # insert LED pattern
+        for i in range(reps):
+            val = random.getrandbits(8)
+            self.blink_led(index, freq, val, val)
 
-		Returns:
-			None
+        return
 
-		"""
-		reps = freq * period # number of light pattern repetitions
+    def insert_light_pattern_b(self, index, freq, period):
+        """LEDs change turn on and off for a set number of repetitions.
 
-		# insert LED pattern
-		for i in range(reps):
-			self.blink_led(index, freq, 0xFF, 0x00)
+        Args:
+                index (int): Time index for when to start the light pattern [sec]
+                freq (float): Frequency in which to operate the light pattern [Hz]
+                period (int): Length of time in which to operate the dance primitive [sec]
 
-		return
+        Returns:
+                None
 
-	def insert_light_pattern_c(self, index, freq, period):
-		""" Description not provided.
-		
-		Args:
-			index (int): Time index for when to start the light pattern [sec]
-			freq (float): Frequency in which to operate the light pattern [Hz]
-			period (int): Length of time in which to operate the dance primitive [sec]
+        """
+        reps = freq * period  # number of light pattern repetitions
 
-		Returns:
-			None
+        # insert LED pattern
+        for i in range(reps):
+            self.blink_led(index, freq, 0xFF, 0x00)
 
-		"""
-		reps = freq * period # number of light pattern repetitions
+        return
 
-		# insert LED pattern
-		val1 = random.getrandbits(8)
-		val2 = ~val1
-		
-		for i in range(reps):
-			self.blink_led(index, freq, val1, val2)
+    def insert_light_pattern_c(self, index, freq, period):
+        """Description not provided.
 
-		return
+        Args:
+                index (int): Time index for when to start the light pattern [sec]
+                freq (float): Frequency in which to operate the light pattern [Hz]
+                period (int): Length of time in which to operate the dance primitive [sec]
 
-	def __repr__(self):
-		return "Choreography({}, {})".format(self.samples, self.sampling_rate)
+        Returns:
+                None
+
+        """
+        reps = freq * period  # number of light pattern repetitions
+
+        # insert LED pattern
+        val1 = random.getrandbits(8)
+        val2 = ~val1
+
+        for i in range(reps):
+            self.blink_led(index, freq, val1, val2)
+
+        return
+
+    def __repr__(self):
+        return "Choreography({}, {})".format(self.samples, self.sampling_rate)

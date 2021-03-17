@@ -1,8 +1,8 @@
+.DS_Store
 venv
 dancebots.egg-info
 archive
 .vscode
-*.mp3
 *.wav
 *.pyc
 

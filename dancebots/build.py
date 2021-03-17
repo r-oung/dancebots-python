@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-'''
+"""
 db_protocol.py: Builds dancebot file
-'''
+"""
 
 # __author__ = "Raymond Oung"
 # __email__ = "raymond.oung@gmail.com"
@@ -23,18 +23,20 @@ def get_youtube_mp3(html):
     # except OSError:
     #     pass
 
-    print("Downloading", html, "as MP3 from YouTube...")
+    print ("Downloading", html, "as MP3 from YouTube...")
     ytdl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
+        "format": "bestaudio/best",
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
     }
 
     with yt.YoutubeDL(ytdl_opts) as ytdl:
-        ytdl.download(['https://www.youtube.com/watch?v=HCjNJDNzw8Y'])
+        ytdl.download(["https://www.youtube.com/watch?v=HCjNJDNzw8Y"])
 
     return
 
@@ -60,9 +62,9 @@ def main():
     s = aubio.source("test.wav")
     print s.samplerate
 
-    print("No. Channels: {}".format(data.shape[1]))
-    print("No. Samples: {}".format(data.shape[0]))
-    print("Sampling Rate: {} Hz".format(rate))
+    print ("No. Channels: {}".format(data.shape[1]))
+    print ("No. Samples: {}".format(data.shape[0]))
+    print ("Sampling Rate: {} Hz".format(rate))
 
     # ch_l = data[:,0] # left channel
     # ch_r = data[:,1] # right channel (motor)

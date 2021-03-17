@@ -1,103 +1,103 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-class Move():
-  """Move
+class Move:
+    """Move"""
 
-  """
-  _forward = 1 # forward bit
-  _backward = 0 # backward bit
-  _speed_max = 100 # maximum speed [0, 100]
-  _speed_min = 0 # minimum speed [0, 100]
+    _forward = 1  # forward bit
+    _backward = 0  # backward bit
+    _speed_max = 100  # maximum speed [0, 100]
+    _speed_min = 0  # minimum speed [0, 100]
 
+    def __init__(self):
+        self._frames = []
 
-  def __init__(self):
-    self._frames = []
+    def _append_frame(self, beats, left_motor, right_motor):
+        self._frames.append(
+            {
+                "beats": beats,
+                "seconds": "",  # @TODO overload at class level or function level?
+                "left_motor": left_motor,
+                "right_motor": right_motor,
+            }
+        )
 
+    def _motor(self, speed, direction):
+        """Convert speed and direction to binary list"""
+        if speed > self._speed_max or speed < self._speed_min:
+            raise ValueError("Speed must be a value between 0 and 100")
 
-  def _append_frame(self, beats, left_wheel, right_wheel):
-    self._frames.append({
-      "beats": beats,
-      "seconds": "", # @TODO overload at class level or function level?
-      "left_wheel": left_wheel,
-      "right_wheel": right_wheel,
-    })
-  
+        if direction != self._forward and direction != self._backward:
+            raise ValueError("Direction must be either 0 or 1")
 
-  def _wheel(self, speed, direction):
-    """Convert speed and direction to binary list
-    """
-    if speed > self._speed_max or speed < self._speed_min:
-      raise ValueError("Speed must be a value between 0 and 100")
+        # normalize speed
+        speed_norm = speed * 128.0 / 100.0
 
-    if direction != self._forward and direction != self._backward:
-      raise ValueError("Direction must be either 0 or 1")
+        # convert decimal to binary list
+        binary_list = [int(x) for x in "{:08b}".format(int(round(speed_norm)))]
 
-    # normalize speed
-    speed_norm = speed * 128.0 / 100.0
+        # include direction bit
+        binary_list[-1] = direction
 
-    # convert decimal to binary list
-    binary_list = [int(x) for x in '{:08b}'.format(int(round(speed_norm)))]
+        return binary_list
 
-    # include direction bit
-    binary_list[-1] = direction
+    def forward(self, beats, speed=100):
+        self._append_frame(
+            beats, self._motor(speed, self._forward), self._motor(speed, self._forward)
+        )
+        return
 
-    return binary_list
+    def backward(self, beats, speed=100):
+        self._append_frame(
+            beats,
+            self._motor(speed, self._backward),
+            self._motor(speed, self._backward),
+        )
+        return
 
+    def left(self, beats, speed=100):
+        self._append_frame(
+            beats, self._motor(speed, self._backward), self._motor(speed, self._forward)
+        )
+        return
 
-  def forward(self, beats, speed=100):
-    self._append_frame(beats, self._wheel(speed, self._forward), self._wheel(speed, self._forward))
-    return
+    def right(self, beats, speed=100):
+        self._append_frame(
+            beats, self._motor(speed, self._forward), self._motor(speed, self._backward)
+        )
+        return
 
+    def stop(self, beats):
+        self._append_frame(beats, [0] * 8, [0] * 8)
+        return
 
-  def backward(self, beats, speed=100):
-    self._append_frame(beats, self._wheel(speed, self._backward), self._wheel(speed, self._backward))
-    return
-
-
-  def left(self, beats, speed=100):
-    self._append_frame(beats, self._wheel(speed, self._backward), self._wheel(speed, self._forward))
-    return
-  
-
-  def right(self, beats, speed=100):
-    self._append_frame(beats, self._wheel(speed, self._forward), self._wheel(speed, self._backward))
-    return
-
-  
-  def stop(self, beats):
-    self._append_frame(beats, [0]*8, [0]*8)
-    return
-
-
-  @property
-  def frames(self):
-    return self._frames
+    @property
+    def frames(self):
+        return self._frames
 
 
 if __name__ == "__main__":
-  move = Move()
-  move.forward(5, 100)
-  move.backward(5, 100)
-  move.left(5, 100)
-  move.right(5, 100)
-  move.stop(1)
+    move = Move()
+    move.forward(5, 100)
+    move.backward(5, 100)
+    move.left(5, 100)
+    move.right(5, 100)
+    move.stop(1)
 
-  print(move.frames)
-  print(len(move.frames))
-
+    print(move.frames)
+    print(len(move.frames))
 
 
 # import sys
 # import random
 # import numpy as np
-# import matplotlib.pyplot as plt 
+# import matplotlib.pyplot as plt
 
 # from scipy.io import wavfile
 
 
 # def blink_led(self, index, freq, val1, val2):
 # 	"""Inserts LED commands to the dancebot-bitstream.
-  
+
 # 	Args:
 # 		index (int):
 # 		freq (float):
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
 # 	Returns:
 # 		None
-    
+
 # 	"""
 # 	# dance primitive period for a single repetition [sec]
 # 	period = 1.0 / freq
@@ -146,9 +146,9 @@ if __name__ == "__main__":
 # @staticmethod
 # def motor(speed, direction):
 # 	""" Converts motor command to the dancebot bitstream.
-  
+
 # 	A dancebot motor command consists of 8-bits, LSB-first.
-  
+
 # 		[ Motor Direction | Motor Speed ]
 # 		[        7        |    6:0      ]
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
 # 		0: Backward
 
 # 	Args:
-# 		speed (int): Motor speed; a value between 0-100. 
+# 		speed (int): Motor speed; a value between 0-100.
 # 		direction (bool): Motor direction.
 
 # 	Returns:
