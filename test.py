@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import wave
+import struct
+import random
+
 from dancebots import Move
 from dancebots import Frame
 
-
 # Convert instructions / frames to audio
-def moves_to_bitstream(moves, bpm=120):
+def moves_to_bitstream(moves, lights=None, bpm=120):
     beat_length = 60.0 / bpm  # seconds per beat
 
     bitstream = []
@@ -21,23 +24,45 @@ def moves_to_bitstream(moves, bpm=120):
 
     return bitstream
 
+# Convert bitstream to WAV file
+def bitstream_to_wav(bitstream, filename="output.wav", framerate=44100):
+    with wave.open(filename, "w") as wav_file:
+        wav_file.setnchannels(2) # number of channels
+        wav_file.setsampwidth(2) # sample with [bytes]
+        wav_file.setframerate(framerate) # frame-rate [Hz]
+        wav_file.setnframes(len(bitstream))
+        wav_file.setcomptype("NONE", "Not compressed") # compression type
 
-def bitsream_to_wav(bitstream, sample_rate=44100):
-    # see create.py
-    pass
+        # WAV file here is using short (16-bit) signed integers
+        # So we multiply each bit by 32767 to get the maximum value
+        bin_list = []
+        for bit in bitstream:
+            # channel-1
+            bin_data = struct.pack('h', 0)
+            bin_list.append(bin_data)
+
+            # channel-2
+            bin_data = struct.pack('h', int(bit * 32767.0))
+            bin_list.append(bin_data)
+
+        bin_string = b''.join(bin_list)
+        wav_file.writeframes(bin_string)
+    
+    return
 
 
 if __name__ == "__main__":
     move = Move()
 
-    move.forward(5)
-    move.backward(5)
-    move.left(5)
-    move.right(5)
+    move.forward(1)
+    move.backward(1)
+    move.left(1)
+    move.right(1)
     move.stop(1)
 
     bitstream = moves_to_bitstream(move.frames)
-    print(len(bitstream))
+    bitstream_to_wav(bitstream)
+
 
     # Python plotting libraries
     # https://opensource.com/article/20/4/plot-data-python
