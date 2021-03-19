@@ -52,17 +52,35 @@ def bitstream_to_wav(bitstream, filename="output.wav", framerate=44100):
 
 
 if __name__ == "__main__":
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    import librosa
+
     move = Move()
 
     move.forward(1)
-    move.backward(1)
-    move.left(1)
-    move.right(1)
-    move.stop(1)
+    # move.backward(1)
+    # move.left(1)
+    # move.right(1)
+    # move.stop(1)
 
     bitstream = moves_to_bitstream(move.frames)
     bitstream_to_wav(bitstream)
 
+
+    # Load the audio as a waveform `y`
+    # Store the sampling rate as `sr`
+    # y, sr = librosa.load('output.wav')
+
+    # @TODO https://stackoverflow.com/a/18625294
+    with wave.open('output.wav', "r") as wav_file:
+        print(wav_file.getparams())
+        # y = wav_file.readframes(wav_file.getnframes())
+        y = wav_file.readframes(10)
+        print(y)
+        # plt.plot(y)
+        # plt.show()
 
     # Python plotting libraries
     # https://opensource.com/article/20/4/plot-data-python
