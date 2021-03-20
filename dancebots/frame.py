@@ -36,22 +36,22 @@ class Frame:
         return
 
     def create(self, l_motor=[0] * 8, r_motor=[0] * 8, leds=[0] * 8):
-        if len(l_motor) is not 8:
+        if len(l_motor) != 8:
             raise ValueError("Left motor must contain at least 8 values")
 
-        if len(r_motor) is not 8:
+        if len(r_motor) != 8:
             raise ValueError("Right motor must contain at least 8 values")
 
-        if len(leds) is not 8:
+        if len(leds) != 8:
             raise ValueError("LEDs must contain at least 8 values")
 
         self._start()
 
         frame = l_motor + r_motor + leds
         for x in frame:
-            if x is 1:
+            if x == 1:
                 self._one()
-            elif x is 0:
+            elif x == 0:
                 self._zero()
             else:
                 raise ValueError("Frame must contain binary values, i.e. 0 or 1")

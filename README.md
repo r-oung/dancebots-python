@@ -67,3 +67,10 @@ Workflow:
 3. While playing the song, tap on the keyboard ";". A tap can represent a motion primitive, LED pattern, etc. By default annotations will be Cyclical Two-Level Counter (measure/beat). This can be changed under Edit > Number New Instants With
 4. Annotations can be exported (CTRL + Y) to a CSV file, which can then be read in by a Python script to generate the dance protocol.
 
+
+## Python plotting libraries
+- https://opensource.com/article/20/4/plot-data-python
+
+## Firmware
+- Watchdog set to 500 msec
+- https://github.com/philippReist/dancebots_electronics/blob/master/DancebotsFirmware/src/MP3DanceBot.c
