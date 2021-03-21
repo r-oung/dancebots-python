@@ -1,2 +1,3 @@
 librosa
 matplotlib
+youtube_dl
