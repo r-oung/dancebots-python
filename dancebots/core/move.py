@@ -3,10 +3,10 @@
 class Move:
     """Move"""
 
-    _forward = 1  # forward bit
-    _backward = 0  # backward bit
-    _speed_max = 100  # maximum speed [0, 100]
-    _speed_min = 0  # minimum speed [0, 100]
+    _forward = 1 # forward bit
+    _backward = 0 # backward bit
+    _speed_max = 100 # maximum speed [0, 100]
+    _speed_min = 0 # minimum speed [0, 100]
 
     def __init__(self):
         self._frames = []

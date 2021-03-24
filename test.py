@@ -21,24 +21,49 @@ def moves_to_bitstream(moves, lights=None, bpm=120):
     return bitstream
 
 if __name__ == "__main__":
-    import dancebots.utils.convert as convert
-    import dancebots.utils.plot as plt
+    import dancebots as db
+    from dancebots import Move
 
-    from dancebots.core.move import Move
+    # Pseudocode
+    db.load("./samples/dance_demo.mp3")
+    # db.metronome("metronome.wav") # write metronome file
 
-    move = Move()
+    # # Alt-1
+    # move = Move('beat')
+    # for i in range(5):
+    #     move.forward(1)
+    #     move.backward(1)
+    # move.stop(1)  
 
-    move = Move()
-    move.forward(1)
+    # # Alt-2
+    # frame = Frame()
+    # frame.make()
+    # frame.make(l_motor, r_motor)
+    # frame.make(leds)
+    # frame.make(l_motor, r_motor, leds)
+    
+    # db.sync(move) # generate synchronized bitstream from moves and lights
+    # db.sync(frame) # i.e. Move class should inherit Frame class
+    # db.plot() # plot WAV file with L/R channels
+    # db.save("output.wav")
+
+
+    # import dancebots.utils.convert as convert
+    # import dancebots.utils.plot as plt
+
+    # from dancebots.core.move import Move
+
+    # move = Move()
+    # move.forward(1)
     # move.backward(1)
     # move.left(1)
     # move.right(1)
     # move.stop(1)
 
     # Convert moves to bitstream
-    bitstream = moves_to_bitstream(move.frames)
-    y, sr = convert.bitstream_to_wav(bitstream, bitstream)
+    # bitstream = moves_to_bitstream(move.frames)
+    # y, sr = convert.bitstream_to_wav(bitstream, bitstream)
 
     # Plot bitstream
-    plt.plot(bitstream, 44100)
+    # plt.plot(bitstream, 44100)
     
