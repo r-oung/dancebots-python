@@ -8,8 +8,9 @@ class Move:
     _speed_max = 100 # maximum speed [0, 100]
     _speed_min = 0 # minimum speed [0, 100]
 
-    def __init__(self):
+    def __init__(self, unit='beats'):
         self._frames = []
+        self._unit = unit # `beats` or `seconds`
 
     def _append_frame(self, beats, left_motor, right_motor):
         self._frames.append(

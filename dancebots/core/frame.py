@@ -17,15 +17,11 @@ class Frame:
         for x in range(num_samples):
             self._samples.append(1.0)
 
-        return
-
     def _one(self):
         num_samples = int(self._one_duration * (self._sample_rate / 1000.0))
 
         for x in range(num_samples):
             self._samples.append(1.0)
-
-        return
 
     def _zero(self):
         num_samples = int(self._zero_duration * (self._sample_rate / 1000.0))
@@ -33,9 +29,12 @@ class Frame:
         for x in range(num_samples):
             self._samples.append(0.0)
 
-        return
+    def _clear(self):
+        self._samples = []
 
     def create(self, l_motor=[0] * 8, r_motor=[0] * 8, leds=[0] * 8):
+        self._clear()
+
         if len(l_motor) != 8:
             raise ValueError("Left motor must contain at least 8 values")
 

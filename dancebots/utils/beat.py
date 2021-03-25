@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 import librosa
 
-from .inout import load
 from .waveform import sinewave
-from .convert import bitstream_to_wav
 
 def get_beats(y, sr):
     # Convert to mono
@@ -22,15 +20,7 @@ def get_beats(y, sr):
 
     return bpm, beat_times
 
-def metronome(filename):
-    # Load song file
-    y, sr = load(filename)
-
-    # Get beats
-    bpm, beat_times = get_beats(y, sr)
-    print('Number of beats: {}'.format(len(beat_times)))
-    print('Estimated tempo: {:.2f} BPM'.format(bpm))
-
+def metronome(y, sr, beat_times):
     # Construct bitstream
     bitstream = []
     beat_index = 0
@@ -52,14 +42,25 @@ def metronome(filename):
                 sample_index += len(tone)
                 beat_index += 1
     
-    # Construct WAV file
-    print("Constructing WAV file...")
-    ch_l = y[0]
-    ch_r = y[1]
-    bitstream_to_wav(ch_l, bitstream)
-    print("Done")
+    return bitstream
 
 
 if __name__ == "__main__":
-    # Test beat tracker
-    metronome("../../samples/dance_demo.mp3")
+    from inout import load
+    from convert import bitstream_to_wav
+
+    # Load song file
+    y, sr = load('../../samples/dance_demo.mp3')
+
+    # Get beats
+    bpm, beat_times = get_beats(y, sr)
+    print('Number of beats: {}'.format(len(beat_times)))
+    print('Estimated tempo: {:.2f} BPM'.format(bpm))
+
+    # Construct metronome bitstream
+    bitstream = metronome(y, sr, beat_times)
+
+    # Construct WAV file
+    print('Constructing WAV file...')
+    bitstream_to_wav(ch_l=y[0], ch_r=bitstream, filename='output.wav')
+    print('Done')

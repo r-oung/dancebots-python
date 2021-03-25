@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import librosa
-import youtube_dl as yt
+# import youtube_dl as yt
 
 def load(filename):
     # Load audio file without any modifications
@@ -10,23 +10,23 @@ def load(filename):
     print('Sampling rate: {} Hz | Channels: {} | Samples: {}'.format(sr, y.shape[0], y.shape[1]))
     return y, sr
 
-def get_youtube(url):
-    options = {
-        "format": "bestaudio/best",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "wav",
-                "preferredquality": "192",
-            }
-        ],
-    }
+# def get_youtube(url):
+#     options = {
+#         "format": "bestaudio/best",
+#         "postprocessors": [
+#             {
+#                 "key": "FFmpegExtractAudio",
+#                 "preferredcodec": "wav",
+#                 "preferredquality": "192",
+#             }
+#         ],
+#     }
 
-    with yt.YoutubeDL(options) as ytdl:
-        print ("Downloading: {}".format(url))
-        ytdl.download([url])
+#     with yt.YoutubeDL(options) as ytdl:
+#         print ("Downloading: {}".format(url))
+#         ytdl.download([url])
 
-    return
+#     return
 
 
 if __name__ == "__main__":

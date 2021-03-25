@@ -25,22 +25,22 @@ if __name__ == "__main__":
     from dancebots import Move
 
     # Pseudocode
-    db.load("./samples/dance_demo.mp3")
-    # db.metronome("metronome.wav") # write metronome file
+    db.load('./samples/dance_demo.mp3')
+    db.metronome('metronome.wav') # write metronome file
 
-    # # Alt-1
-    # move = Move('beat')
-    # for i in range(5):
-    #     move.forward(1)
-    #     move.backward(1)
-    # move.stop(1)  
+    # Alt-1
+    move = Move('beats')
+    for i in range(5):
+        move.forward(1)
+        move.backward(1)
+    move.stop(1)
 
     # # Alt-2
     # frame = Frame()
-    # frame.make()
-    # frame.make(l_motor, r_motor)
-    # frame.make(leds)
-    # frame.make(l_motor, r_motor, leds)
+    # frame.create()
+    # frame.create(l_motor, r_motor)
+    # frame.create(leds)
+    # frame.create(l_motor, r_motor, leds)
     
     # db.sync(move) # generate synchronized bitstream from moves and lights
     # db.sync(frame) # i.e. Move class should inherit Frame class
