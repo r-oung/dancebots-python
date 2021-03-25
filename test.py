@@ -29,7 +29,7 @@ if __name__ == "__main__":
     db.metronome('metronome.wav') # write metronome file
 
     # Alt-1
-    move = Move('beats')
+    move = Move()
     for i in range(5):
         move.forward(1)
         move.backward(1)
