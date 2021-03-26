@@ -9,10 +9,10 @@ class Move:
     _speed_min = 0 # minimum speed [0, 100]
 
     def __init__(self):
-        self._frames = []
+        self._steps = []
 
-    def _append_frame(self, beats, left_motor, right_motor):
-        self._frames.append(
+    def _append_step(self, beats, left_motor, right_motor):
+        self._steps.append(
             {
                 "beats": beats,
                 "left_motor": left_motor,
@@ -40,38 +40,33 @@ class Move:
         return binary_list
 
     def forward(self, beats, speed=100):
-        self._append_frame(
+        self._append_step(
             beats, self._motor(speed, self._forward), self._motor(speed, self._forward)
         )
-        return
 
     def backward(self, beats, speed=100):
-        self._append_frame(
+        self._append_step(
             beats,
             self._motor(speed, self._backward),
             self._motor(speed, self._backward),
         )
-        return
 
     def left(self, beats, speed=100):
-        self._append_frame(
+        self._append_step(
             beats, self._motor(speed, self._backward), self._motor(speed, self._forward)
         )
-        return
 
     def right(self, beats, speed=100):
-        self._append_frame(
+        self._append_step(
             beats, self._motor(speed, self._forward), self._motor(speed, self._backward)
         )
-        return
 
     def stop(self, beats):
-        self._append_frame(beats, [0] * 8, [0] * 8)
-        return
+        self._append_step(beats, [0] * 8, [0] * 8)
 
     @property
-    def frames(self):
-        return self._frames
+    def steps(self):
+        return self._steps
 
 
 if __name__ == "__main__":
@@ -82,5 +77,5 @@ if __name__ == "__main__":
     move.right(5, 100)
     move.stop(1)
 
-    print(move.frames)
-    print(len(move.frames))
+    print(move.steps)
+    print(len(move.steps))
