@@ -68,7 +68,19 @@ class Move:
     def steps(self):
         return self._steps
 
+def pprint(steps):
+    # @TODO Integrate with __str__
+    # https://blog.softhints.com/python-print-pretty-table-list/
+    print()
+    header = ['Step', 'Left Motor', 'Right Motor', 'Beats']
+    format_row = "{:<6} {:<26} {:<26} {:<7}"
+    print(format_row.format(*header))
 
+    for num, step in enumerate(steps, start=1):
+        print(format_row.format(num, str(step['left_motor']), str(step['right_motor']), step['beats']))
+
+    print()
+    
 if __name__ == "__main__":
     move = Move()
     move.forward(5, 100)
@@ -77,5 +89,4 @@ if __name__ == "__main__":
     move.right(5, 100)
     move.stop(1)
 
-    print(move.steps)
-    print(len(move.steps))
+    pprint(move.steps)

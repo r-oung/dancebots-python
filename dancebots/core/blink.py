@@ -3,8 +3,7 @@
 class Blink:
     """Blink"""
 
-    def __init__(self, max_freq=4):
-        self._max_freq = max_freq
+    def __init__(self):
         self._steps = []
 
     def _append_step(self, beats, leds):
@@ -26,7 +25,7 @@ class Blink:
             raise ValueError("Frequency must be a positive integer")
 
         num_steps = beats * freq
-        for i in range(1, num_steps):
+        for i in range(num_steps):
             self._append_step(1 / freq, leds)
             
             # Toggle LEDs
@@ -41,22 +40,32 @@ class Blink:
     @property
     def steps(self):
         return self._steps
+    
+    # https://realpython.com/python-print/
+    def __str__(self):
+        return self._steps
+    
+    def __repr__(self):
+        return f"Blink('{self._max_freq}')"
 
-def pretty_print(steps):
-    format_row = "{:>5}" * 2
-    for step in steps:
-        print(step.keys())
-        # print(format_row.format(*step))
+def pprint(steps):
+    # @TODO Integrate with __str__
+    # https://blog.softhints.com/python-print-pretty-table-list/
+    print()
+    header = ['Step', 'LEDs', 'Beats']
+    format_row = "{:<6} {:<26} {:<7}"
+    print(format_row.format(*header))
+
+    for num, step in enumerate(steps, start=1):
+        print(format_row.format(num, str(step['leds']), step['beats']))
+
+    print()
 
 if __name__ == "__main__":
     leds = Blink()
-    leds.blink([0,1,0,1,0,1,0,1], 2)
+    leds.blink([0,1,0,1,0,1,0,1], 2, 4)
     leds.blink([1,0,1,0,1,0,1,0], 2, 2)
-    leds.hold([1] * 8, 1)
+    leds.hold([1] * 8, 4)
     leds.stop(1)
 
-    # print(leds.steps)
-    # print(len(leds.steps))
-
-    # https://blog.softhints.com/python-print-pretty-table-list/
-    pretty_print(leds.steps)
+    pprint(leds.steps)

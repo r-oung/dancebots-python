@@ -8,29 +8,29 @@ class Frame:
     _zero_duration = 0.2  # zero bit duration [msec]
 
     def __init__(self, sample_rate=44100):
-        self._samples = []
+        self._bitstream = []
         self._sample_rate = sample_rate
 
     def _start(self):
         num_samples = int(self._start_duration * (self._sample_rate / 1000.0))
 
         for x in range(num_samples):
-            self._samples.append(1.0)
+            self._bitstream.append(1)
 
     def _one(self):
         num_samples = int(self._one_duration * (self._sample_rate / 1000.0))
 
         for x in range(num_samples):
-            self._samples.append(1.0)
+            self._bitstream.append(1)
 
     def _zero(self):
         num_samples = int(self._zero_duration * (self._sample_rate / 1000.0))
 
         for x in range(num_samples):
-            self._samples.append(0.0)
+            self._bitstream.append(0)
 
     def _clear(self):
-        self._samples = []
+        self._bitstream = []
 
     def create(self, l_motor=[0] * 8, r_motor=[0] * 8, leds=[0] * 8):
         self._clear()
@@ -59,13 +59,15 @@ class Frame:
 
     @property
     def bitstream(self):
-        return self._samples
+        return self._bitstream
 
     @property
     def duration(self):
         sample_period = 1.0 / self._sample_rate
-        return len(self._samples) * sample_period
+        return len(self._bitstream) * sample_period
 
+    def __str__(self):
+        return str(self._bitstream)
 
 if __name__ == "__main__":
     frame = Frame()
@@ -73,5 +75,5 @@ if __name__ == "__main__":
     r_motor = [0, 1, 1, 1, 1, 0, 1, 0]
     leds = [0, 1, 0, 1, 0, 1, 0, 1]
     frame.create(l_motor, r_motor, leds)
-    print(frame.bitstream)
-    print(frame.duration)
+    print(frame)
+    print("Duration: {} seconds".format(round(frame.duration, 2)))
