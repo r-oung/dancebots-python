@@ -3,20 +3,20 @@
 class Move:
     """Move"""
 
-    _forward = 1 # forward bit
-    _backward = 0 # backward bit
-    _speed_max = 100 # maximum speed [0, 100]
-    _speed_min = 0 # minimum speed [0, 100]
+    _forward = 1  # forward bit
+    _backward = 0  # backward bit
+    _speed_max = 100  # maximum speed [0, 100]
+    _speed_min = 0  # minimum speed [0, 100]
 
     def __init__(self):
         self._steps = []
 
-    def _append_step(self, beats, left_motor, right_motor):
+    def _append_step(self, beats, motor_l, motor_r):
         self._steps.append(
             {
                 "beats": beats,
-                "left_motor": left_motor,
-                "right_motor": right_motor,
+                "motor_l": motor_l,
+                "motor_r": motor_r,
             }
         )
 
@@ -68,19 +68,23 @@ class Move:
     def steps(self):
         return self._steps
 
-def pprint(steps):
-    # @TODO Integrate with __str__
-    # https://blog.softhints.com/python-print-pretty-table-list/
-    print()
-    header = ['Step', 'Left Motor', 'Right Motor', 'Beats']
-    format_row = "{:<6} {:<26} {:<26} {:<7}"
-    print(format_row.format(*header))
+    def __str__(self):
+        summary = "\n"
 
-    for num, step in enumerate(steps, start=1):
-        print(format_row.format(num, str(step['left_motor']), str(step['right_motor']), step['beats']))
+        header = ["Step", "Left Motor", "Right Motor", "Beats"]
+        format_row = "{:<6} {:<26} {:<26} {:<7}"
+        summary += format_row.format(*header)
+        summary += "\n"
 
-    print()
-    
+        for num, step in enumerate(self._steps, start=1):
+            summary += format_row.format(
+                num, str(step["motor_l"]), str(step["motor_r"]), step["beats"]
+            )
+            summary += "\n"
+
+        return summary
+
+
 if __name__ == "__main__":
     move = Move()
     move.forward(5, 100)
@@ -88,5 +92,4 @@ if __name__ == "__main__":
     move.left(5, 100)
     move.right(5, 100)
     move.stop(1)
-
-    pprint(move.steps)
+    print(move)

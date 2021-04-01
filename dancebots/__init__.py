@@ -1,67 +1,74 @@
 from . import core
 from . import utils
 
-from .core.move import Move
+from .core import Move
+from .core import Light
+from .core import Compose
 
 # Convenience functions
+moves = None
+lights = None
 
 def load(filename):
-    global y, sr
-    global bpm, beat_times
+    global audio, sample_rate
+    global beat_times
 
     # Load audio file
-    print('Loading audio file: {}'.format(filename))
-    y, sr = utils.inout.load(filename)
-    
+    print("Loading audio file: {}".format(filename))
+    audio, sample_rate = utils.load(filename)
+
     # Extract beats
-    print('Extracting beats...')
-    bpm, beat_times = utils.beat.get_beats(y, sr)
-    print('Estimated tempo: {:.2f} BPM'.format(bpm))
+    print("Extracting beats...")
+    bpm, beat_times = utils.get_beats(audio, sample_rate)
+    print("Estimated tempo: {:.2f} BPM".format(bpm))
 
 
-def metronome(filename='output.wav', beat_channel='right'):
-    # Construct metronome bitstream
-    bitstream = utils.beat.metronome(y, sr, beat_times)
+def insert(obj):
+    if isinstance(obj, Move):
+        moves = obj
+  
+    elif isinstance(obj, Light):
+        lights = obj
 
-    # Save file
-    save(filename, beat_times)
-
-
-def sync(moves, leds):
-    global bitstream = []
-    beat_fraction = 4 # Constant
-    frames = [{}] * len(y) * beat_fraction
-    
-    i = 0
-    
-    # Step through MOVES
-    for move in moves:
-        for beat in move['beats']:
-            for fraction in range(beat_fraction):
-                frames[i] = {
-                    'left_motor': move['left_motor'],
-                    'right_motor': move['right_motor'],
-                }
-                i += 1
-
-    # @TODO LEDS
-
-    # Convert choreography to bitstream
-    for frame in frames:
-        f = Frame() # @TODO create frame in the constructor
-        f.create(frame)
-        bitstream += f.bitstream
+    else:
+        raise ValueError("Invalid argument")
 
 
 def plot():
-    utils.plot(y, sr)
+    utils.plot(channel_l=audio[0], channel_r=bitstream, sample_rate=sample_rate)
 
 
-def save(filename="output.wav", beat_channel='right'):
-    print('Constructing audio file...')
-    if (beat_channel == 'right'):
-        utils.convert.bitstream_to_wav(ch_l=y[0], ch_r=bitstream, filename=filename, sr=sr)
-    elif (beat_channel == 'left'):
-        utils.convert.bitstream_to_wav(ch_l=bitstream, ch_r=y[1], filename=filename, sr=sr)
+def save(filename="output.wav", audio_channel="left"):
+    global bitstream
 
-    print('Done')
+    print("Composing choreography")
+    composition = Compose(moves, lights)
+    #@TODO Consolidate 2 different composition functions
+    bitstream = utils.convert.composition_to_bitstream(
+        composition, beat_times, sample_rate
+    )
+
+    # Make composition-bitstream the same length as audio channel
+    if len(bitstream) > audio.shape[1]:
+        bitstream = bitstream[: audio.shape[1] :]
+    else:
+        bitstream += [0] * (audio.shape[1] - len(bitstream))
+
+
+    print("Constructing audio file...")
+    if audio_channel == "left":
+        utils.create_wav(
+            channel_l=audio[0],
+            channel_r=bitstream,
+            filename=filename,
+            sample_rate=sample_rate,
+        )
+    elif audio_channel == "right":
+        utils.create_wav(
+            channel_l=bitstream,
+            channel_r=audio[1],
+            filename=filename,
+            sample_rate=sample_rate,
+        )
+
+    print("Done")

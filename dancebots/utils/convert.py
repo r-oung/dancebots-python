@@ -1,32 +1,102 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import wave
-import struct
+from .waveform import sinewave
+from ..core import Frame
 
-def bitstream_to_wav(ch_l, ch_r, filename="output.wav", sr=44100):
-    if len(ch_l) != len(ch_r):
-        raise ValueError("Left and right channel lists must be of equal length: ({}, {})".format(len(ch_l), len(ch_r)))
 
-    with wave.open(filename, "w") as wav_file:
-        wav_file.setnchannels(2) # number of channels
-        wav_file.setsampwidth(2) # sample with [bytes]
-        wav_file.setframerate(sr) # frame-rate [Hz]
-        wav_file.setnframes(len(ch_l))
-        wav_file.setcomptype("NONE", "Not compressed") # compression type
+def beats_to_bitstream(beat_times, sample_rate=44100):
+    # Construct bitstream from a list of beat_times
+    bitstream = []
 
-        # WAV file here is using short (16-bit) signed integers
-        # So we multiply each bit by 32767 to get the maximum value
-        bin_list = []
-        for i in range(len(ch_l)):
-            # left-channel
-            bin_data = struct.pack('h', int(ch_l[i] * 32767.0))
-            bin_list.append(bin_data)
+    # Initialize indices
+    beat_index = 0
+    sample_index = 0
 
-            # right-channel
-            bin_data = struct.pack('h', int(ch_r[i] * 32767.0))
-            bin_list.append(bin_data)
+    # Create a tone
+    tone = sinewave(1000, sample_rate)
 
-        bin_string = b''.join(bin_list)
-        wav_file.writeframes(bin_string)
-    
-    return
+    # Add beats to bitstream as long as there are beats
+    while beat_index < len(beat_times):
+        if (sample_index / float(sample_rate)) < beat_times[beat_index]:
+            # Off beat
+            bitstream.append(0)
+            sample_index += 1
+        else:
+            # On beat
+            bitstream += tone
+            sample_index += len(tone)
+            beat_index += 1
+
+    return bitstream
+
+
+def composition_to_bitstream(composition, beat_times, sample_rate=44100):
+    """
+    Synchronize composition to beat-times
+    and generate bitstream
+    """
+    # Construct bitstream
+    bitstream = []
+
+    # Get average seconds per beat
+    sum = 0
+    for i in range(1, len(beat_times)):
+        sum += beat_times[i] - beat_times[i - 1]
+    seconds_per_beat = sum / (len(beat_times) - 1)
+
+    # Initialize indices
+    beat_index = 0
+    sample_index = 0
+    composition_index = 0
+
+    # Add composition to bitstream as long as there are beats
+    while beat_index < len(beat_times):
+        if (sample_index / float(sample_rate)) < beat_times[beat_index]:
+            # Off beat
+            bitstream.append(0)
+            sample_index += 1
+        else:
+            # On beat
+            if composition_index < len(composition.steps):
+                step = composition.steps[composition_index]
+                seconds_elapsed = 0
+                seconds_per_step = step["beats"] * seconds_per_beat
+
+                while seconds_elapsed < seconds_per_step:
+                    frame = Frame(
+                        motor_l=step["motor_l"],
+                        motor_r=step["motor_r"],
+                        leds=step["leds"],
+                        sample_rate=sample_rate,
+                    )
+                    bitstream += frame.bitstream
+                    sample_index += frame.length
+                    seconds_elapsed += frame.duration
+
+                composition_index += 1
+
+            beat_index += 1
+
+    return bitstream
+
+
+def composition_to_bitstream2(composition, seconds_per_beat=1):
+    """Generate bitstream from composition (no beat syncing)"""
+    # Construct bitstream
+    bitstream = []
+
+    # Add composition to bitstream as long as there are beats
+    for step in composition.steps:
+        seconds_elapsed = 0
+        seconds_per_step = step["beats"] * seconds_per_beat
+
+        while seconds_elapsed < seconds_per_step:
+            frame = Frame(
+                motor_l=step["motor_l"],
+                motor_r=step["motor_r"],
+                leds=step["leds"],
+            )
+            bitstream += frame.bitstream
+            seconds_elapsed += frame.duration
+
+    return bitstream

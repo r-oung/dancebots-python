@@ -2,35 +2,31 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 
-def plot(y, sr):
-    if len(y.shape) != 2:
-        raise ValueError("Incorrect array shape")
 
-    ch_l = y[0]
-    ch_r = y[1]
+def plot(channel_l, channel_r, sample_rate=44100):
+    if len(channel_l) != len(channel_r):
+        raise ValueError(
+            "Left and right channel lists must be of equal length: ({}, {})".format(
+                len(channel_l), len(channel_r)
+            )
+        )
 
     t = []
-    for x in range(y.shape[1]):
-        t.append(x / float(sr)) # [sec]
+    for x in range(len(channel_l)):
+        t.append(x / float(sample_rate))  # [seconds]
 
-    # Plot bitstream
     ax1 = plt.subplot(211)
-    plt.plot(t, ch_l)
-    plt.ylabel('Left Channel')
+    plt.plot(t, channel_l)
+    plt.ylabel("Left Channel")
 
     ax2 = plt.subplot(212, sharex=ax1, sharey=ax1)
-    plt.plot(t, ch_r)
-    plt.ylabel('Right Channel')
-    plt.xlabel('Seconds')
+    plt.plot(t, channel_r)
+    plt.ylabel("Right Channel")
+
+    plt.xlabel("Seconds")
 
     plt.show()
 
-
-if __name__ == "__main__":
-    from inout import load
-
-    y, sr = load('../../samples/dance_demo.mp3')
-    plot(y, sr)
 
 # @TODO For any arbitrary input, show the start of a frame, left/right motor, and LEDs
 # Guide: https://matplotlib.org/stable/tutorials/index.html

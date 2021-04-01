@@ -1,2 +1,4 @@
-from . import frame
-from . import move
+from .frame import Frame
+from .move import Move
+from .light import Light
+from .compose import Compose
