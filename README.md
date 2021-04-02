@@ -27,7 +27,13 @@ Messages are 3 bytes long:
 [ LEFT MOTOR | RIGHT MOTOR | LEDS     ]
 [ 8-bits     | 8-bits      | 8-bits   ]
 ```
-Motor byte consists of 7-bits for speed with LSB sent first, and the last bit use for direction (Forward: 1, Backward: 0).
+
+The motor byte consists of 8-bits. Bits 0-6 are for speed with LSB sent first. The last bit is used for direction (Forward: 1, Backward: 0).
+
+```
+[ bit-0 | bit-1 | bit-2 | bit-3 | bit-4 | bit-5 | bit-6 |   bit-7   ]
+[  LSB  ----------------- SPEED -----------------  MSB  | DIRECTION ]
+```
 
 Bit representation is time-modulated (time between edges) as follows:
 -------------------------------------------------

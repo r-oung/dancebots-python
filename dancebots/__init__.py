@@ -5,12 +5,18 @@ from .core import Move
 from .core import Light
 from .core import Compose
 
-# Convenience functions
+# Global variables
+audio = None
+sample_rate = 44100
+beat_times = None
 moves = None
 lights = None
+channel_l = []
+channel_r = []
 
 def load(filename):
-    global audio, sample_rate
+    global audio
+    global sample_rate
     global beat_times
 
     # Load audio file
@@ -24,51 +30,67 @@ def load(filename):
 
 
 def insert(obj):
+    global moves
+    global lights
+
+    # @TODO Allow for any number of inserts
     if isinstance(obj, Move):
         moves = obj
-  
+        print("Added")
     elif isinstance(obj, Light):
         lights = obj
-
     else:
         raise ValueError("Invalid argument")
 
 
-def plot():
-    utils.plot(channel_l=audio[0], channel_r=bitstream, sample_rate=sample_rate)
-
-
 def save(filename="output.wav", audio_channel="left"):
-    global bitstream
+    global channel_l
+    global channel_r
 
     print("Composing choreography")
     composition = Compose(moves, lights)
-    #@TODO Consolidate 2 different composition functions
     bitstream = utils.convert.composition_to_bitstream(
         composition, beat_times, sample_rate
     )
+    
+    if audio != None:
+        # Audio data exists
+        # Make composition-bitstream the same length as audio channel
+        if len(bitstream) > audio.shape[1]:
+            bitstream = bitstream[: audio.shape[1] :]
+        else:
+            bitstream += [0] * (audio.shape[1] - len(bitstream))
 
-    # Make composition-bitstream the same length as audio channel
-    if len(bitstream) > audio.shape[1]:
-        bitstream = bitstream[: audio.shape[1] :]
+        # Buffer data from selected audio channel
+        if audio_channel == "left":
+            channel_l = audio[0]
+            channel_r = bitstream
+        elif audio_channel == "right":
+            channel_l = bitstream
+            channel_r = audio[1]
     else:
-        bitstream += [0] * (audio.shape[1] - len(bitstream))
-
+        # Audio data does not exist
+        # Duplicate bitstream on audio channel
+        channel_l = bitstream
+        channel_r = bitstream
 
     print("Constructing audio file...")
-    if audio_channel == "left":
-        utils.create_wav(
-            channel_l=audio[0],
-            channel_r=bitstream,
-            filename=filename,
-            sample_rate=sample_rate,
-        )
-    elif audio_channel == "right":
-        utils.create_wav(
-            channel_l=bitstream,
-            channel_r=audio[1],
-            filename=filename,
-            sample_rate=sample_rate,
-        )
-
+    utils.create_wav(
+        channel_l=channel_l,
+        channel_r=channel_r,
+        filename=filename,
+        sample_rate=sample_rate,
+    )
     print("Done")
+
+    return {
+        "channel_l": channel_l,
+        "channel_r": channel_r,
+    }
+
+
+def plot():
+    global channel_l
+    global channel_r
+    
+    utils.plot(channel_l=channel_l, channel_r=channel_r, sample_rate=sample_rate)

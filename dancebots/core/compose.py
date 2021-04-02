@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .frame import Frame
 from .move import Move
 from .light import Light
 
 
 class Compose:
-    """Compose"""
+    """Combine moves and lights into a single composition"""
 
     _steps = []
 
@@ -98,18 +97,18 @@ class Compose:
         # https://blog.softhints.com/python-print-pretty-table-list/
         summary = "\n"
 
-        header = ["Step", "Left Motor", "Right Motor", "LEDs", "Beats"]
-        format_row = "{:<6} {:<26} {:<26} {:<26} {:<7}"
+        header = ["Step", "Beats", "Left Motor", "Right Motor", "LEDs"]
+        format_row = "{:<6} {:<7} {:<26} {:<26} {:<26}"
         summary += format_row.format(*header)
         summary += "\n"
 
         for num, step in enumerate(self._steps, start=1):
             summary += format_row.format(
                 num,
+                step["beats"],
                 str(step["motor_l"]),
                 str(step["motor_r"]),
                 str(step["leds"]),
-                step["beats"],
             )
             summary += "\n"
 
