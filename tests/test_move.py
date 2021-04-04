@@ -38,8 +38,8 @@ move = Move()
 move.forward(5)
 
 # composition = Compose(move, None)
-# bitstream = utils.convert.composition_to_bitstream(composition, None)
-# print(len(bitstream))
+# frames = utils.convert.composition_to_frames(composition, None)
+# print(frames.length)
 
 db.insert(move)
 db.save()
