@@ -34,4 +34,5 @@ a = Frame(motor_l, motor_r, leds)
 b = Frame(motor_l, motor_r, leds)
 
 c = sum([a, b])
-utils.plot(channel_l=c.data, channel_r=c.data)
+print(c)
+utils.plot(channel_l=c.bits, channel_r=c.bits)

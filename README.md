@@ -21,43 +21,49 @@ source venv/bin/activate
 Follow online installation instructions [here](https://github.com/ytdl-org/youtube-dl/blob/master/README.md#configuration)
 
 
-## Protocol:
-Messages are 3 bytes long:
+## Usage
+### Frame
+A datagram is the smallest unit the Dancebot protocol. It contains all of the information necessary to drive the motors and LEDs. It consists of 24-bits:
 ```
 [ LEFT MOTOR | RIGHT MOTOR | LEDS     ]
 [ 8-bits     | 8-bits      | 8-bits   ]
 ```
 
-The motor byte consists of 8-bits. Bits 0-6 are for speed with LSB sent first. The last bit is used for direction (Forward: 1, Backward: 0).
+Datagrams are concatenated one after another, separated by a delimiter block.
+
+Bit representation is time-modulated (time between rising/falling edges) as follows:
+-------------------------------------------------
+TYPE      | Ticks		| Interval (msec)
+-------------------------------------------------
+DELIMITER |      > 5805 |          > 0.725625 
+    1     | 3367 - 5805	| 0.420875 - 0.725625
+    0     |      < 3367 |          < 0.420875
+
+where 1 tick represents one period of the microcontroller's clock, which in this case is 1 / 8 MHz. Note that there is a built-in watchdog timer that needs to be kicked every < 500 msec. Otherwise the motors will automatically turn off.
+
+The following bit representation will be used in this package:
+-----------------------
+TYPE | Interval (msec)
+-----------------------
+DELIMITER | 2.0 
+    1     | 0.7
+    0     | 0.2
+
+In the datagram illustration above, the motor byte consists of 8-bits:
+- Bits 0-6 are for speed with LSB sent first
+- The last bit is used for direction (Forward: 1, Backward: 0)
 
 ```
 [ bit-0 | bit-1 | bit-2 | bit-3 | bit-4 | bit-5 | bit-6 |   bit-7   ]
 [  LSB  ----------------- SPEED -----------------  MSB  | DIRECTION ]
 ```
 
-Bit representation is time-modulated (time between edges) as follows:
--------------------------------------------------
-TYPE | Ticks		| Interval (msec)
--------------------------------------------------
-START|      > 5805 	|          > 0.725625 
-    1| 3367 - 5805	| 0.420875 - 0.725625
-    0|      < 3367 	|          < 0.420875
-
-where 1 tick represents one period of the microcontroller's clock, which in this case is 1 / 8 MHz. Note that there is a built-in watchdog timer, which needs to be kicked < 500 msec. Otherwise, the motors are automatically turned off.
-
-The following bit representation will be used in this package:
------------------------
-TYPE | Interval (msec)
------------------------
-START| 2.0 
-    1| 0.7
-    0| 0.2
-
-```
-
-### Convoluted Description
+#### A Convoluted Description
     Given the 8MHz clock of the ATTiny, a pulse (i.e. time between to edges of the MP3 player voltage on the right channel) is considered a RESET, or start of a new 24bit message, if it is longer than 5805 ticks (0.73ms, or 32 samples at 44.1kHz), considered a 1 if it is between 3367 and 5805 ticks, and a 0 if it is below 3367 ticks. Then, the 24 bit message consists of 8bits for the left motor, 8bits for the right motor, and 8 bits for the 8 LEDs. The LSB is sent first. For the motors, bit 0-6 is speed (valid range 0-100), and bit 7 is direction (1 FWD, 0 BWD [this is wrongly labeled in the FW on Bitbucket). For the LEDs, each bit corresponds directly to the LED.
 
+
+### Bitstream
+A bitstream is a sequence of bits. In this context, it refers to a sequence of frames.
 
 ## Reference
 - [Firmware](https://github.com/philippReist/dancebots_electronics/blob/master/DancebotsFirmware/src/MP3DanceBot.c)

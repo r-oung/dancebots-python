@@ -49,17 +49,18 @@ def save(filename="output.wav", audio_channel="left"):
 
     print("Composing choreography")
     composition = Compose(moves, lights)
-    bitstream = utils.convert.composition_to_bitstream(
+    frames = utils.convert.composition_to_frames(
         composition, beat_times, sample_rate
     )
     
     if audio != None:
         # Audio data exists
-        # Make composition-bitstream the same length as audio channel
-        if len(bitstream) > audio.shape[1]:
-            bitstream = bitstream[: audio.shape[1] :]
+        # Make composition-bitstream the same length as the audio channel
+        if frames.length > audio.shape[1]:
+            bitstream = frames.bits[: audio.shape[1] :]
         else:
-            bitstream += [0] * (audio.shape[1] - len(bitstream))
+            bitstream = frames.bits
+            bitstream += [0] * (audio.shape[1] - frames.length)
 
         # Buffer data from selected audio channel
         if audio_channel == "left":
@@ -71,8 +72,8 @@ def save(filename="output.wav", audio_channel="left"):
     else:
         # Audio data does not exist
         # Duplicate bitstream on audio channel
-        channel_l = bitstream
-        channel_r = bitstream
+        channel_l = frames.bits
+        channel_r = frames.bits
 
     print("Constructing audio file...")
     utils.create_wav(

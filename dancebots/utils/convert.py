@@ -30,39 +30,37 @@ def beats_to_bitstream(beat_times, sample_rate=44100):
     return bitstream
 
 
-def step_to_bitstream(step, sample_rate):
+def step_to_frames(step, sample_rate=44100):
     seconds_per_beat = 1 # @TODO Remove this
 
     # Construct bitstream
-    wav_samples = 0
-    seconds_elapsed = 0
     seconds_per_step = step["beats"] * seconds_per_beat
 
     # Add composition to bitstream
-    frames = []
+    frame = Frame(step["motor_l"], step["motor_r"], step["leds"], sample_rate)
     while frame.duration < seconds_per_step:
-        frames.append(Frame(step["motor_l"], step["motor_r"], step["leds"], sample_rate))
-
+        frame += frame
     
-    return frame.data
+    return frame
 
 
-def composition_to_bitstream(composition, beat_times=None, sample_rate=44100):
+def composition_to_frames(composition, beat_times=None, sample_rate=44100):
     """
     Generate bitstream from composition
     Synchronize to beats if necessary
     """
-    # Construct bitstream
-    bitstream = Bitstream(sample_rate)
+    frame = None
 
     # A. Beat synchronization not required
     if beat_times == None:
-        # Add composition to bitstream
+        # Convert composition to frames
         for step in composition.steps:
-            bs, ws = step_to_bitstream(step, sample_rate)
-            bitstream += bs
+            if frame == None:
+                frame = step_to_frames(step, sample_rate)
+            else:
+                frame += step_to_frames(step, sample_rate)
 
-        return bitstream
+        return frame
     
     # B. Beat synchronization is required
     # Get average seconds per beat
@@ -87,11 +85,13 @@ def composition_to_bitstream(composition, beat_times=None, sample_rate=44100):
             # On beat
             if composition_index < len(composition.steps):
                 step = composition.steps[composition_index]
-                bs, ws = step_to_bitstream(step, seconds_per_beat)
-                bitstream += bs
-                wav_sample_index += ws
+                if frame == None:
+                    frame = step_to_frames(step, seconds_per_beat)
+                else:
+                    frame += step_to_frames(step, seconds_per_beat)
+                wav_sample_index = frame.length
                 composition_index += 1
 
             beat_index += 1
 
-    return bitstream
+    return frame
