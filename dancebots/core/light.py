@@ -1,69 +1,67 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from .step import Step
+
 class Light:
     """Light"""
 
-    def __init__(self):
+    def __init__(self, unit="beats"):
+        if unit != "beats" and unit != "seconds":
+            raise ValueError("unit must either be 'beats' or 'seconds'")
+        
         self._steps = []
+        self._unit = unit
 
-    def _append_step(self, beats, leds):
+    def _append_step(self, num_units, leds):
+        if num_units < 0:
+            raise ValueError("num_units must be a positive value")
+
         if len(leds) != 8:
-            raise ValueError("LED list must be of length 8")
+            raise ValueError("led list must contain 8 values")
 
         for led in leds:
             if led != 0 and led != 1:
-                raise ValueError("LED value must be either 0 or 1")
+                raise ValueError("led value must be either 0 or 1")
 
-        if beats < 0:
-            raise ValueError("Beats must be a positive value")
+        self._steps.append(Step([0] * 8, [0] * 8, leds, self._unit, num_units))
 
-        self._steps.append(
-            {
-                "beats": beats,
-                "leds": leds,
-            }
-        )
+    def blink(self, leds, num_units, freq=1):
+        if freq < 1 or not isinstance(freq, int):
+            raise ValueError("freq must be a positive integer")
 
-    def blink(self, leds, beats, freq=1):
-        if not isinstance(freq, int) or freq < 1:
-            raise ValueError("Frequency must be a positive integer")
-
-        num_steps = beats * freq
+        num_steps = num_units * freq
         for i in range(num_steps):
             self._append_step(1 / freq, leds)
 
             # Toggle LEDs
             leds = [int(not led) for led in leds]
 
-    def hold(self, leds, beats):
-        self._append_step(beats, leds)
+    def hold(self, leds, num_units):
+        self._append_step(num_units, leds)
 
-    def stop(self, beats):
-        self._append_step(beats, [0] * 8)
+    def stop(self, num_units):
+        self._append_step(num_units, [0] * 8)
+    
+    def clear(self):
+        self._steps = []
 
     @property
     def steps(self):
         return self._steps
 
     def __str__(self):
-        summary = "\n"
+        # pretty print steps
+        lines = []
 
-        header = ["Step", "LEDs", "Beats"]
+        if self._unit == "beats":
+            header = ["Step", "LEDs", "Beats"]
+        elif self._unit == "seconds":
+            header = ["Step", "LEDs", "Seconds"]
+
         format_row = "{:<6} {:<26} {:<7}"
-        summary += format_row.format(*header)
-        summary += "\n"
+        lines.append(format_row.format(*header))
 
         for num, step in enumerate(self._steps, start=1):
-            summary += format_row.format(num, str(step["leds"]), step["beats"])
-            summary += "\n"
+            lines.append(format_row.format(num, str(step.leds), step.num_units))
 
-        return summary
-
-
-if __name__ == "__main__":
-    leds = Light()
-    leds.blink([0, 1, 0, 1, 0, 1, 0, 1], 2, 4)
-    leds.blink([1, 0, 1, 0, 1, 0, 1, 0], 2, 2)
-    leds.hold([1] * 8, 4)
-    leds.stop(1)
-    print(leds)
+        return "\n".join(lines)

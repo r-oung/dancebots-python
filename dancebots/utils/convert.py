@@ -30,37 +30,36 @@ def beats_to_bitstream(beat_times, sample_rate=44100):
     return bitstream
 
 
-def step_to_frames(step, sample_rate=44100):
-    seconds_per_beat = 1 # @TODO Remove this
+def step_to_frames(step, seconds_per_unit=1, sample_rate=44100):
+    seconds_per_step = step.num_units * seconds_per_unit
 
-    # Construct bitstream
-    seconds_per_step = step["beats"] * seconds_per_beat
-
-    # Add composition to bitstream
-    frame = Frame(step["motor_l"], step["motor_r"], step["leds"], sample_rate)
-    while frame.duration < seconds_per_step:
-        frame += frame
+    frames = None
+    while frames.duration < seconds_per_step:
+        if frames == None:
+            frames = Frame(step.motor_l, step.motor_r, step.leds, sample_rate)
+        else:
+            frames += frames
     
-    return frame
+    return frames
 
 
-def composition_to_frames(composition, beat_times=None, sample_rate=44100):
+def steps_to_frames(steps, beat_times=None, sample_rate=44100):
     """
-    Generate bitstream from composition
+    Generate frames
     Synchronize to beats if necessary
     """
-    frame = None
+    frames = None
 
     # A. Beat synchronization not required
     if beat_times == None:
         # Convert composition to frames
         for step in composition.steps:
-            if frame == None:
-                frame = step_to_frames(step, sample_rate)
+            if frames == None:
+                frames = step_to_frames(step, sample_rate)
             else:
-                frame += step_to_frames(step, sample_rate)
+                frames += step_to_frames(step, sample_rate)
 
-        return frame
+        return frames
     
     # B. Beat synchronization is required
     # Get average seconds per beat
@@ -72,25 +71,25 @@ def composition_to_frames(composition, beat_times=None, sample_rate=44100):
 
     # Initialize indices
     beat_index = 0
-    wav_sample_index = 0
-    composition_index = 0
+    wav_index = 0
+    step_index = 0
 
     # Add composition to bitstream as long as there are beats
     while beat_index < len(beat_times):
-        if (wav_sample_index / float(sample_rate)) < beat_times[beat_index]:
+        if (wav_index / float(sample_rate)) < beat_times[beat_index]:
             # Off beat
             bitstream.append(0)
-            wav_sample_index += 1
+            wav_index += 1
         else:
             # On beat
-            if composition_index < len(composition.steps):
-                step = composition.steps[composition_index]
+            if step_index < len(steps):
+                current_step = steps[step_index]
                 if frame == None:
-                    frame = step_to_frames(step, seconds_per_beat)
+                    frame = step_to_frames(current_step, seconds_per_beat)
                 else:
-                    frame += step_to_frames(step, seconds_per_beat)
-                wav_sample_index = frame.length
-                composition_index += 1
+                    frame += step_to_frames(current_step, seconds_per_beat)
+                wav_index = len(frame.bits)
+                step_index += 1
 
             beat_index += 1
 

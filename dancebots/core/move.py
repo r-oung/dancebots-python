@@ -1,32 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-class Move:
+from .step import Step
+
+class Move():
     """Move"""
 
-    _forward = 1  # forward bit
-    _backward = 0  # backward bit
-    _speed_max = 100  # maximum speed [0, 100]
-    _speed_min = 0  # minimum speed [0, 100]
+    _FORWARD = 1 # forward bit
+    _BACKWARD = 0 # backward bit
+    _SPEED_MAX = 100 # maximum speed [0, 100]
+    _SPEED_MIN = 0 # minimum speed [0, 100]
 
-    def __init__(self):
+    def __init__(self, unit="beats"):
+        if unit != "beats" and unit != "seconds":
+            raise ValueError("unit must either be 'beats' or 'seconds'")
+ 
         self._steps = []
+        self._unit = unit
 
-    def _append_step(self, beats, motor_l, motor_r, description=""):
-        self._steps.append(
-            {
-                "beats": beats,
-                "motor_l": motor_l,
-                "motor_r": motor_r,
-                "description": description,
-            }
-        )
+    def _append_step(self, num_units, motor_l, motor_r):
+        if num_units < 1 or not isinstance(num_units, int):
+            raise ValueError("num_units must be a positive integer")
+
+        self._steps.append(Step(motor_l, motor_r, [0] * 8, self._unit, num_units))
 
     def _motor(self, speed, direction):
         """Convert speed and direction to binary list"""
-        if speed > self._speed_max or speed < self._speed_min:
+        if speed > self._SPEED_MAX or speed < self._SPEED_MIN:
             raise ValueError("Speed must be a value between 0 and 100")
 
-        if direction != self._forward and direction != self._backward:
+        if direction != self._FORWARD and direction != self._BACKWARD:
             raise ValueError("Direction must be either 0 or 1")
 
         # Normalize speed
@@ -43,32 +45,32 @@ class Move:
 
         return binary_list
 
-    def forward(self, beats, speed=100):
-        bin_l = self._motor(speed, self._forward)
-        bin_r = self._motor(speed, self._forward)
-        self._append_step(beats, bin_l, bin_r, "Forward")
-        return bin_l, bin_r
+    def forward(self, num_units, speed=100):
+        motor_l = self._motor(speed, self._FORWARD)
+        motor_r = self._motor(speed, self._FORWARD)
+        self._append_step(num_units, motor_l, motor_r)
+        return motor_l, motor_r
 
-    def backward(self, beats, speed=100):
-        bin_l = self._motor(speed, self._backward)
-        bin_r = self._motor(speed, self._backward)
-        self._append_step(beats, bin_l, bin_r, "Backward")
-        return bin_l, bin_r
+    def backward(self, num_units, speed=100):
+        motor_l = self._motor(speed, self._BACKWARD)
+        motor_r = self._motor(speed, self._BACKWARD)
+        self._append_step(num_units, motor_l, motor_r)
+        return motor_l, motor_r
 
-    def left(self, beats, speed=100):
-        bin_l = self._motor(speed, self._backward)
-        bin_r = self._motor(speed, self._forward)
-        self._append_step(beats, bin_l, bin_r, "Left")
-        return bin_l, bin_r
+    def left(self, num_units, speed=100):
+        motor_l = self._motor(speed, self._BACKWARD)
+        motor_r = self._motor(speed, self._FORWARD)
+        self._append_step(num_units, motor_l, motor_r)
+        return motor_l, motor_r
 
-    def right(self, beats, speed=100):
-        bin_l = self._motor(speed, self._forward)
-        bin_r = self._motor(speed, self._backward)
-        self._append_step(beats, bin_l, bin_r, "Right")
-        return bin_l, bin_r
+    def right(self, num_units, speed=100):
+        motor_l = self._motor(speed, self._FORWARD)
+        motor_r = self._motor(speed, self._BACKWARD)
+        self._append_step(num_units, motor_l, motor_r)
+        return motor_l, motor_r
 
-    def stop(self, beats):
-        self._append_step(beats, [0] * 8, [0] * 8, "Stop")
+    def stop(self, num_units):
+        self._append_step(num_units, [0] * 8, [0] * 8)
 
     def clear(self):
         self._steps = []
@@ -78,27 +80,20 @@ class Move:
         return self._steps
 
     def __str__(self):
-        summary = "\n"
+        # pretty print steps
+        lines = []
 
-        header = ["Step", "Description", "Beats", "Left Motor", "Right Motor"]
-        format_row = "{:<6} {:<15} {:<7} {:<26} {:<26}"
-        summary += format_row.format(*header)
-        summary += "\n"
+        if self._unit == "beats":
+            header = ["Step", "Beats", "Left Motor", "Right Motor"]
+        elif self._unit == "seconds":
+            header = ["Step", "Seconds", "Left Motor", "Right Motor"]
+
+        format_row = "{:<6} {:<7} {:<26} {:<26}"
+        lines.append(format_row.format(*header))
 
         for num, step in enumerate(self._steps, start=1):
-            summary += format_row.format(
-                num, step["description"], step["beats"], str(step["motor_l"]), str(step["motor_r"]),
-            )
-            summary += "\n"
+            lines.append(format_row.format(
+                num, step.num_units, str(step.motor_l), str(step.motor_r),
+            ))
 
-        return summary
-
-
-if __name__ == "__main__":
-    move = Move()
-    move.forward(5, 100)
-    move.backward(5, 100)
-    move.left(5, 100)
-    move.right(5, 100)
-    move.stop(1)
-    print(move)
+        return "\n".join(lines)

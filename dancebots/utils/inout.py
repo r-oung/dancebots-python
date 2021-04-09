@@ -8,7 +8,7 @@ import struct
 
 
 def load(filename):
-    # Load audio file without any modifications
+    # Load audio file without any modifications to the sampling rate
     # https://librosa.org/doc/latest/generated/librosa.load.html
     audio, sample_rate = librosa.load(filename, sr=None, mono=False)
     print(
@@ -29,26 +29,26 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
         )
 
     with wave.open(filename, "w") as wav_file:
-        wav_file.setnchannels(2)  # number of channels
-        wav_file.setsampwidth(2)  # sample with [bytes]
-        wav_file.setframerate(sample_rate)  # frame-rate [Hz]
-        wav_file.setnframes(len(channel_l))
-        wav_file.setcomptype("NONE", "Not compressed")  # compression type
+        wav_file.setnchannels(2) # number of channels
+        wav_file.setsampwidth(2) # sample width [bytes]
+        wav_file.setframerate(sample_rate) # frame-rate [Hz]
+        wav_file.setnframes(len(channel_l)) # total number of audio frames
+        wav_file.setcomptype("NONE", "Not compressed") # no compression
 
         # WAV file here is using short (16-bit) signed integers
         # So we multiply each bit by 32767 to get the maximum value
-        bin_list = []
+        binary_list = []
         for i in range(len(channel_l)):
             # left-channel
-            bin_data = struct.pack("h", int(channel_l[i] * 32767.0))
-            bin_list.append(bin_data)
+            binary_data = struct.pack("h", int(channel_l[i] * 32767.0))
+            binary_list.append(binary_data)
 
             # right-channel
-            bin_data = struct.pack("h", int(channel_r[i] * 32767.0))
-            bin_list.append(bin_data)
+            binary_data = struct.pack("h", int(channel_r[i] * 32767.0))
+            binary_list.append(binary_data)
 
-        bin_string = b"".join(bin_list)
-        wav_file.writeframes(bin_string)
+        binary_string = b"".join(binary_list)
+        wav_file.writeframes(binary_string)
 
     return
 

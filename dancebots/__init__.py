@@ -9,8 +9,8 @@ from .core import Compose
 audio = None
 sample_rate = 44100
 beat_times = None
-moves = None
-lights = None
+moves = []
+lights = []
 channel_l = []
 channel_r = []
 
@@ -29,16 +29,15 @@ def load(filename):
     print("Estimated tempo: {:.2f} BPM".format(bpm))
 
 
-def insert(obj):
+def add(obj):
     global moves
     global lights
 
     # @TODO Allow for any number of inserts
     if isinstance(obj, Move):
-        moves = obj
-        print("Added")
+        moves.append(obj)
     elif isinstance(obj, Light):
-        lights = obj
+        lights.append(obj)
     else:
         raise ValueError("Invalid argument")
 
