@@ -94,11 +94,3 @@ class Frame:
             return self
         else:
             return self.__add__(other)
-
-if __name__ == "__main__":
-    motor_l = [0, 1, 1, 1, 1, 0, 1, 0]
-    motor_r = [0, 1, 1, 1, 1, 0, 1, 0]
-    leds = [0, 1, 0, 1, 0, 1, 0, 1]
-    frame = Frame(motor_l, motor_r, leds)
-    print(frame)
-    print("Duration: {:.4} seconds".format(frame.duration))
