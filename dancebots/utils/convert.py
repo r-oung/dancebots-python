@@ -43,7 +43,7 @@ def step_to_frames(step, seconds_per_unit=1, sample_rate=44100):
     return frames
 
 
-def steps_to_frames(steps, beat_times=None, sample_rate=44100):
+def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
     """
     Generate frames
     Synchronize to beats if necessary
@@ -59,11 +59,11 @@ def steps_to_frames(steps, beat_times=None, sample_rate=44100):
             else:
                 frames += step_to_frames(step, sample_rate)
 
-        return frames
+        return frames.bits
     
     # B. Beat synchronization is required
     # Get average seconds per beat
-    # This is used to estimate the period of a step
+    # Used to estimate the period of a step
     sum = 0
     for i in range(1, len(beat_times)):
         sum += beat_times[i] - beat_times[i - 1]
@@ -71,15 +71,14 @@ def steps_to_frames(steps, beat_times=None, sample_rate=44100):
 
     # Initialize indices
     beat_index = 0
-    wav_index = 0
     step_index = 0
+    bitstream = []
 
     # Add composition to bitstream as long as there are beats
     while beat_index < len(beat_times):
-        if (wav_index / float(sample_rate)) < beat_times[beat_index]:
+        if (len(bitstream) / float(sample_rate)) < beat_times[beat_index]:
             # Off beat
-            bitstream.append(0)
-            wav_index += 1
+            bitstream += [0]
         else:
             # On beat
             if step_index < len(steps):
@@ -88,9 +87,10 @@ def steps_to_frames(steps, beat_times=None, sample_rate=44100):
                     frame = step_to_frames(current_step, seconds_per_beat)
                 else:
                     frame += step_to_frames(current_step, seconds_per_beat)
-                wav_index = len(frame.bits)
+                
+                bitstream += frame.bits
                 step_index += 1
 
             beat_index += 1
 
-    return frame
+    return bitstream

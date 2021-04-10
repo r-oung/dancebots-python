@@ -15,6 +15,7 @@ class Compose:
     move_steps = []
     for move in moves:
       move_steps += move.steps
+    print("Move steps: {}".format(len(move_steps)))
 
     # Concatenate all lights steps
     light_steps = []
@@ -50,18 +51,17 @@ class Compose:
 
       # Merge lights and moves
       for this_step in self._steps:
-        step = move_steps[step_i]
-
         # If next step exists
         if step_i < len(move_steps):
+          step = move_steps[step_i]
           this_step.motor_l = step.motor_l
           this_step.motor_r = step.motor_r
           unit_cnt += this_step.num_units
 
-        if unit_cnt >= step.num_units:
-          # Go to the next step
-          step_i += 1
-          unit_cnt = 0
+          if unit_cnt >= step.num_units:
+            # Go to the next step
+            step_i += 1
+            unit_cnt = 0
 
       # If there are any remaining steps in the move
       if unit_cnt != 0:

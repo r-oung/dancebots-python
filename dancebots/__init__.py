@@ -33,7 +33,6 @@ def add(obj):
     global moves
     global lights
 
-    # @TODO Allow for any number of inserts
     if isinstance(obj, Move):
         moves.append(obj)
     elif isinstance(obj, Light):
