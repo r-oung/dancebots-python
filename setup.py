@@ -24,7 +24,7 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: Ubuntu, macOS, Windows",
+        "Operating System :: Linux, macOS, Windows",
     ],
     python_requires=">=3.6",
 )

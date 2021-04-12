@@ -1,19 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Moves sequence class.
+
+Defines a move sequence.
+"""
 from .step import Step
 
-class Move():
-    """Move"""
+class Move(object):
+    """Defines a move sequence.
 
-    _FORWARD = 1 # forward bit
-    _BACKWARD = 0 # backward bit
-    _SPEED_MAX = 100 # maximum speed [0, 100]
-    _SPEED_MIN = 0 # minimum speed [0, 100]
+    Attributes:
+            unit: Can either be "beats" or "seconds".
+    """
+
+    _FORWARD = 1  # forward bit
+    _BACKWARD = 0  # backward bit
+    _SPEED_MAX = 100  # maximum speed [0, 100]
+    _SPEED_MIN = 0  # minimum speed [0, 100]
 
     def __init__(self, unit="beats"):
         if unit != "beats" and unit != "seconds":
             raise ValueError("unit must either be 'beats' or 'seconds'")
- 
+
         self._steps = []
         self._unit = unit
 
@@ -46,41 +54,75 @@ class Move():
         return binary_list
 
     def forward(self, num_units, speed=100):
+        """Move forward
+
+        Attributes:
+                num_units: Number of units to run this step.
+                speed: Speed [0-100]
+        """
         motor_l = self._motor(speed, self._FORWARD)
         motor_r = self._motor(speed, self._FORWARD)
         self._append_step(num_units, motor_l, motor_r)
         return motor_l, motor_r
 
     def backward(self, num_units, speed=100):
+        """Move backward
+
+        Attributes:
+                num_units: Number of units to run this step.
+                speed: Speed [0-100]
+        """
         motor_l = self._motor(speed, self._BACKWARD)
         motor_r = self._motor(speed, self._BACKWARD)
         self._append_step(num_units, motor_l, motor_r)
         return motor_l, motor_r
 
     def left(self, num_units, speed=100):
+        """Turn left
+
+        Attributes:
+                num_units: Number of units to run this step.
+                speed: Speed [0-100]
+        """
         motor_l = self._motor(speed, self._BACKWARD)
         motor_r = self._motor(speed, self._FORWARD)
         self._append_step(num_units, motor_l, motor_r)
         return motor_l, motor_r
 
     def right(self, num_units, speed=100):
+        """Turn right
+
+        Attributes:
+                num_units: Number of units to run this step.
+                speed: Speed [0-100]
+        """
         motor_l = self._motor(speed, self._FORWARD)
         motor_r = self._motor(speed, self._BACKWARD)
         self._append_step(num_units, motor_l, motor_r)
         return motor_l, motor_r
 
     def stop(self, num_units):
+        """Stop moving
+
+        Attributes:
+                num_units: The number of units to hold position.
+        """
         self._append_step(num_units, [0] * 8, [0] * 8)
 
     def clear(self):
+        """Clear steps.
+
+        Clears the move sequence.
+        """
         self._steps = []
 
     @property
     def steps(self):
+        """List of move sequence steps"""
         return self._steps
 
     def __str__(self):
-        # pretty print steps
+        """Pretty print steps"""
         lines = []
 
         if self._unit == "beats":
@@ -92,8 +134,13 @@ class Move():
         lines.append(format_row.format(*header))
 
         for num, step in enumerate(self._steps, start=1):
-            lines.append(format_row.format(
-                num, step.num_units, str(step.motor_l), str(step.motor_r),
-            ))
+            lines.append(
+                format_row.format(
+                    num,
+                    step.num_units,
+                    str(step.motor_l),
+                    str(step.motor_r),
+                )
+            )
 
         return "\n".join(lines)

@@ -3,7 +3,7 @@
 from dancebots import utils
 
 # Load song file
-audio, sample_rate = utils.input("./samples/dance_demo.mp3")
+audio, sample_rate = utils.load("../samples/dance_demo.mp3")
 
 # Get beats
 bpm, beat_times = utils.get_beats(audio, sample_rate)
@@ -22,6 +22,6 @@ utils.create_wav(
     channel_l=audio[0],
     channel_r=bitstream,
     filename="output.wav",
-    sample_rate=samples_rate,
+    sample_rate=sample_rate,
 )
 print("Done")
