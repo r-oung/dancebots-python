@@ -14,13 +14,13 @@ class Bitstream:
     """
 
     # Static variables
-    # _DELIMITER = 2.0  # delimiter bit duration [msec]
-    # _ONE = 0.7  # one bit duration [msec]
-    # _ZERO = 0.2  # zero bit duration [msec]
+    _DELIMITER = 2.0  # delimiter bit duration [msec]
+    _ONE = 0.6  # one bit duration [msec]
+    _ZERO = 0.2  # zero bit duration [msec]
 
-    _DELIMITER = 1.0  # delimiter bit duration [msec]
-    _ONE = 0.55  # one bit duration [msec]
-    _ZERO = 0.17  # zero bit duration [msec]
+    # _DELIMITER = 1.0  # delimiter bit duration [msec]
+    # _ONE = 0.55  # one bit duration [msec]
+    # _ZERO = 0.17  # zero bit duration [msec]
 
     def __init__(self, frames=None, sample_rate=44100):
         if frames is not None:

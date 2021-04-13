@@ -32,6 +32,10 @@ class TestCompose(unittest.TestCase):
         Compose(moves=[self.move1], lights=[self.light1, self.light2])
         Compose(moves=[self.move1, self.move2], lights=[self.light1])
 
+    def test_properties(self):
+        # @TODO Check that light frequency matches beat
+        pass
+
     def test_print(self):
         compose = Compose(
             moves=[self.move1, self.move2], lights=[self.light1, self.light2]

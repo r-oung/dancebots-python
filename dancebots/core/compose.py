@@ -39,7 +39,7 @@ class Compose:
                         Step(zeros, zeros, step.leds, 1)
                     ] * step.num_units
                 else:
-                    self._steps += [Step(zeros, zeros, step.leds, 1)]
+                    self._steps += [Step(zeros, zeros, step.leds, step.num_units)]
 
         # Notes:
         # - moves num_units >= 1

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Visualize frame.
+
+"""
 from dancebots.core import Frame
 import dancebots.utils.plot as plot
 

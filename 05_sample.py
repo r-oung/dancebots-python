@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Encode metronome to audio file.
+
+"""
 from dancebots import utils
 
 # Load song file

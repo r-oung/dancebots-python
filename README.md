@@ -61,7 +61,7 @@ The following bit representation will be used in this package:
 | TYPE      | Interval (msec) |
 |-----------|-----------------|
 | DELIMITER |       2.0       |
-|     1     |       0.7       |
+|     1     |       0.6       |
 |     0     |       0.2       |
 
 In the datagram illustration above, the motor byte consists of 8-bits:
