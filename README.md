@@ -66,6 +66,7 @@ The following bit representation will be used in this package:
 
 In the datagram illustration above, the motor byte consists of 8-bits:
 - Bits 0-6 are for speed with LSB sent first
+  - Only decimal values of 0 to 100 are valid
 - The last bit is used for direction:
   - Forward: 1
   - Backward: 0
