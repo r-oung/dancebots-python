@@ -80,9 +80,14 @@ def save(filename="output.wav", audio_channel="left"):
 
     if len(audio) == 0:
         # Audio data does not exist
-        # Duplicate bitstream on audio channel
-        channel_l = bitstream
-        channel_r = bitstream
+        if audio_channel == "left":
+            channel_l = [0] * len(bitstream)
+            channel_r = bitstream
+        elif audio_channel == "right":
+            channel_l = bitstream
+            channel_r = [0] * len(bitstream)
+        else:
+            raise ValueError("Invalid audio channel")
     else:
         # Audio data exists
         # Make composition-bitstream the same length as the audio channel
