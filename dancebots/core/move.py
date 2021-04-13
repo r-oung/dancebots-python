@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Moves sequence class.
 
@@ -6,7 +5,8 @@ Defines a move sequence.
 """
 from .step import Step
 
-class Move(object):
+
+class Move:
     """Defines a move sequence.
 
     Attributes:
@@ -18,25 +18,21 @@ class Move(object):
     _SPEED_MAX = 100  # maximum speed [0, 100]
     _SPEED_MIN = 0  # minimum speed [0, 100]
 
-    def __init__(self, unit="beats"):
-        if unit != "beats" and unit != "seconds":
-            raise ValueError("unit must either be 'beats' or 'seconds'")
-
+    def __init__(self):
         self._steps = []
-        self._unit = unit
 
     def _append_step(self, num_units, motor_l, motor_r):
         if num_units < 1 or not isinstance(num_units, int):
             raise ValueError("num_units must be a positive integer")
 
-        self._steps.append(Step(motor_l, motor_r, [0] * 8, self._unit, num_units))
+        self._steps.append(Step(motor_l, motor_r, [0] * 8, num_units))
 
     def _motor(self, speed, direction):
         """Convert speed and direction to binary list"""
         if speed > self._SPEED_MAX or speed < self._SPEED_MIN:
             raise ValueError("Speed must be a value between 0 and 100")
 
-        if direction != self._FORWARD and direction != self._BACKWARD:
+        if direction not in (self._FORWARD, self._BACKWARD):
             raise ValueError("Direction must be either 0 or 1")
 
         # Normalize speed
@@ -125,11 +121,7 @@ class Move(object):
         """Pretty print steps"""
         lines = []
 
-        if self._unit == "beats":
-            header = ["Step", "Beats", "Left Motor", "Right Motor"]
-        elif self._unit == "seconds":
-            header = ["Step", "Seconds", "Left Motor", "Right Motor"]
-
+        header = ["Step", "Beats", "Left Motor", "Right Motor"]
         format_row = "{:<6} {:<7} {:<26} {:<26}"
         lines.append(format_row.format(*header))
 
@@ -143,4 +135,4 @@ class Move(object):
                 )
             )
 
-        return "\n".join(lines)
+        return "\n" + "\n".join(lines)

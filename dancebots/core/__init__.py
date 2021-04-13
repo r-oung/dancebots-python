@@ -1,3 +1,4 @@
+"""Core package"""
 from .frame import Frame
 from .bitstream import Bitstream
 

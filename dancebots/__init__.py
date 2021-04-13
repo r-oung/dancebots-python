@@ -1,14 +1,20 @@
+"""Dancebots package.
+
+Package to script movement and lights for a DanceBot.
+"""
 from . import core
 from . import utils
 
 from .core import Move
 from .core import Light
-from .core import Compose
+
+# pylint: disable=C0103
+# pylint: disable=W0603
 
 # Global variables
 audio = []
 sample_rate = 44100
-beat_times = []
+beat_times = None
 moves = []
 lights = []
 channel_l = []
@@ -16,6 +22,11 @@ channel_r = []
 
 
 def load(filename):
+    """Load audio file.
+
+    Attributes:
+            filename: Path to audio file.
+    """
     global audio, sample_rate
     global channel_l, channel_r
     global beat_times
@@ -35,6 +46,11 @@ def load(filename):
 
 
 def add(obj):
+    """Add composition element.
+
+    Attributes:
+            obj: Can either be an object of type Move or Light.
+    """
     global moves, lights
 
     if isinstance(obj, Move):
@@ -46,12 +62,18 @@ def add(obj):
 
 
 def save(filename="output.wav", audio_channel="left"):
+    """Save composition.
+
+    Attributes:
+            filename: Path to output audio file.
+            audio_channel: Select which channel to use for audio ("left" or "right")
+    """
     global audio, sample_rate
     global channel_l, channel_r
     global beat_times
 
     print("Composing choreography")
-    composition = Compose(moves, lights)
+    composition = core.Compose(moves, lights)
     bitstream = utils.convert.steps_to_bitstream(
         composition.steps, beat_times, sample_rate
     )
@@ -78,6 +100,8 @@ def save(filename="output.wav", audio_channel="left"):
         elif audio_channel == "right":
             channel_l = bitstream
             channel_r = audio[1]
+        else:
+            raise ValueError("Invalid audio channel")
 
     print("Constructing audio file...")
     utils.create_wav(
@@ -95,16 +119,16 @@ def save(filename="output.wav", audio_channel="left"):
 
 
 def plot():
+    """Plot time-series data."""
     global channel_l, channel_r
     global beat_times
 
     if len(channel_l) == 0 or len(channel_r) == 0:
         raise ValueError("You must first load and/or save an audio file")
 
-    if len(beat_times) == 0:
+    if beat_times is None:
         utils.plot(channel_l=channel_l, channel_r=channel_r, sample_rate=sample_rate)
     else:
-        print("Here {}".format(beat_times[0]))
         utils.plot(
             channel_l=channel_l,
             channel_r=channel_r,

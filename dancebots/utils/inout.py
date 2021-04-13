@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """I/O module.
 
@@ -6,12 +5,14 @@
 import wave
 import struct
 import librosa
+from itertools import cycle
+
 # import youtube_dl as yt
 
 def load(filename):
     """Load audio file.
 
-    Attribute:
+    Attributes:
             filename: Path to audio file.
     """
     # Load audio file without any modifications to the sampling rate
@@ -24,12 +25,10 @@ def load(filename):
     )
     return audio, sample_rate
 
-
-# https://realpython.com/python-print/
 def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
     """Create wave-file from time-series data.
 
-    Attribute:
+    Attributes:
             channel_l: Left channel time-series.
             channel_r: Right channel time-series.
             filename: Output filename.
@@ -43,6 +42,7 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
         )
 
     with wave.open(filename, "w") as wav_file:
+        # pylint: disable=E1101
         wav_file.setnchannels(2)  # number of channels
         wav_file.setsampwidth(2)  # sample width [bytes]
         wav_file.setframerate(sample_rate)  # frame-rate [Hz]
@@ -63,8 +63,6 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
 
         binary_string = b"".join(binary_list)
         wav_file.writeframes(binary_string)
-
-    return
 
 
 # def get_youtube(url):

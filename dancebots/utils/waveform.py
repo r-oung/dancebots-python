@@ -1,9 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Waveforms
 
 """
 import math
+
 
 def sinewave(frequency, sample_rate, duration_milliseconds=100, volume=1.0):
     """Sine wave.
@@ -18,6 +18,8 @@ def sinewave(frequency, sample_rate, duration_milliseconds=100, volume=1.0):
 
     samples = []
     for sample in range(num_samples):
-        samples.append(volume * math.sin(2 * math.pi * frequency * (sample / sample_rate)))
+        samples.append(
+            volume * math.sin(2 * math.pi * frequency * (sample / sample_rate))
+        )
 
     return samples

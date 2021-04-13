@@ -1,7 +1,7 @@
+"""Utilities package"""
 from . import beat
 from . import convert
 from . import inout
-from . import plot
 from . import waveform
 
 from .beat import get_beats

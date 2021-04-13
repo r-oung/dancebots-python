@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''Create dancebot choreography through user input.
+"""Create dancebot choreography through user input.
 
 
 Reference:
@@ -17,16 +17,16 @@ Workflow:
 - User can tap at the keyboard to generate light patterns
 - How to control robot motion???
 
-'''
+"""
 
 import time
 import sys
 import threading
 
 import numpy as np
-import colorama # platform independent way of colouring terminal output
+import colorama  # platform independent way of colouring terminal output
 
-from pydub import AudioSegment # Python 2.7.x
+from pydub import AudioSegment  # Python 2.7.x
 from pydub.playback import play
 from scipy.io import wavfile
 
@@ -34,23 +34,26 @@ from scipy.io import wavfile
 user_val = None
 stored_exception = None
 
+
 def t_player(song):
-	"""Player thread function."""
-	play(song)
-	return
+    """Player thread function."""
+    play(song)
+    return
+
 
 def t_input():
-	while True:
-		user_val = sys.stdin.read(1)
-		print("HELLO")
-		
-max_val = 2**16
+    while True:
+        user_val = sys.stdin.read(1)
+        print ("HELLO")
+
+
+max_val = 2 ** 16
 bars = 20
 
-sub_sampling_frequency = 24.0 #: sub-sampling frequency [Hz]
-sub_sampling_period = 1.0 / sub_sampling_frequency #: sub-sampling period [sec]
+sub_sampling_frequency = 24.0  #: sub-sampling frequency [Hz]
+sub_sampling_period = 1.0 / sub_sampling_frequency  #: sub-sampling period [sec]
 
-filename = "test.wav" # filename of the WAV file
+filename = "test.wav"  # filename of the WAV file
 song = AudioSegment.from_wav(filename)
 sampling_rate, samples = wavfile.read(filename)
 
@@ -64,35 +67,35 @@ t.setDaemon(True)
 t.start()
 
 for i in range(0, len(samples), inc):
-	# user_val = sys.stdin.read()
+    # user_val = sys.stdin.read()
 
-	try:
-		if stored_exception:
-			break;
+    try:
+        if stored_exception:
+            break
 
-		# collect a subset of all left and right channel samples
-		dataL = samples[i:i + inc][0]
-		dataR = samples[i:i + inc][1]
+        # collect a subset of all left and right channel samples
+        dataL = samples[i : i + inc][0]
+        dataR = samples[i : i + inc][1]
 
-		# calculate peak value
-		factor = 5
-		peakL = factor * float(abs(max(dataL) - min(dataL))) / max_val
-		peakR = factor * float(abs(max(dataR) - min(dataR))) / max_val
-		# print("L:{0:0.2f}\tR:{0:0.2f}".format(peakL, peakR))
+        # calculate peak value
+        factor = 5
+        peakL = factor * float(abs(max(dataL) - min(dataL))) / max_val
+        peakR = factor * float(abs(max(dataR) - min(dataR))) / max_val
+        # print("L:{0:0.2f}\tR:{0:0.2f}".format(peakL, peakR))
 
-		# visualize values
-		lString = "■" * int(bars * peakL) + " " * int(bars * (1.0 - peakL))
-		rString = "■" * int(bars * peakR) + " " * int(bars * (1.0 - peakR))
-		print("L[%s]\tR[%s]\t[%s]"%(lString, rString, user_val))
+        # visualize values
+        lString = "■" * int(bars * peakL) + " " * int(bars * (1.0 - peakL))
+        rString = "■" * int(bars * peakR) + " " * int(bars * (1.0 - peakR))
+        print ("L[%s]\tR[%s]\t[%s]" % (lString, rString, user_val))
 
-		# sleep for visualization purposes
-		time.sleep(sub_sampling_period)
+        # sleep for visualization purposes
+        time.sleep(sub_sampling_period)
 
-	except KeyboardInterrupt:
-		stored_exception = sys.exc_info()
+    except KeyboardInterrupt:
+        stored_exception = sys.exc_info()
 
 if stored_exception:
-	print "Exiting gracefully."
-	# raise stored_exception[0], stored_exception[1], stored_exception[2]
+    print "Exiting gracefully."
+    # raise stored_exception[0], stored_exception[1], stored_exception[2]
 
 sys.exit()

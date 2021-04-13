@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Lights sequence class.
 
@@ -6,19 +5,16 @@ Defines a light sequence.
 """
 from .step import Step
 
-class Light(object):
+
+class Light:
     """Defines a light sequence.
 
     Attributes:
             unit: Can either be "beats" or "seconds".
     """
 
-    def __init__(self, unit="beats"):
-        if unit != "beats" and unit != "seconds":
-            raise ValueError("unit must either be 'beats' or 'seconds'")
-
+    def __init__(self):
         self._steps = []
-        self._unit = unit
 
     def _append_step(self, num_units, leds):
         if num_units < 0:
@@ -28,10 +24,10 @@ class Light(object):
             raise ValueError("led list must contain 8 values")
 
         for led in leds:
-            if led != 0 and led != 1:
+            if led not in (0, 1):
                 raise ValueError("led value must be either 0 or 1")
 
-        self._steps.append(Step([0] * 8, [0] * 8, leds, self._unit, num_units))
+        self._steps.append(Step([0] * 8, [0] * 8, leds, num_units))
 
     def blink(self, leds, num_units, freq=1):
         """Blink lights.
@@ -40,6 +36,9 @@ class Light(object):
                 leds: List of bits for controlling the lights.
                 freq: Blink/toggling frequency (per unit)
         """
+        if num_units < 1 or not isinstance(num_units, int):
+            raise ValueError("num_units must be a positive integer")
+
         if freq < 1 or not isinstance(freq, int):
             raise ValueError("freq must be a positive integer")
 
@@ -83,11 +82,7 @@ class Light(object):
         """Pretty print steps"""
         lines = []
 
-        if self._unit == "beats":
-            header = ["Step", "LEDs", "Beats"]
-        elif self._unit == "seconds":
-            header = ["Step", "LEDs", "Seconds"]
-
+        header = ["Step", "LEDs", "Beats"]
         format_row = "{:<6} {:<26} {:<7}"
         lines.append(format_row.format(*header))
 

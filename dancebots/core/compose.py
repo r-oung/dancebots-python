@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Compose class.
 
@@ -7,7 +6,7 @@ A class for converting a list of moves and/or lights into steps.
 from .step import Step
 
 
-class Compose(object):
+class Compose:
     """A class for converting a list of moves and/or lights into steps.
 
     Attributes:
@@ -15,35 +14,32 @@ class Compose(object):
             lights: A list of Light objects.
     """
 
-    def __init__(self, moves=[], lights=[]):
+    def __init__(self, moves=None, lights=None):
         zeros = [0] * 8
         self._steps = []
 
         # Concatenate all moves steps
         move_steps = []
-        for move in moves:
-            move_steps += move.steps
+        if moves is not None:
+            for move in moves:
+                move_steps += move.steps
 
         # Concatenate all lights steps
         light_steps = []
-        for light in lights:
-            light_steps += light.steps
-
-        # Check that moves and lights have the same units
-        move_units = [step.unit for step in move_steps]
-        light_units = [step.unit for step in light_steps]
-        all_units = move_units + light_units
-        if all_units.count(all_units[0]) != len(all_units):
-            raise ValueError("Units are not identical")
+        if lights is not None:
+            for light in lights:
+                light_steps += light.steps
 
         if light_steps:
             # Add lights to the composition
 
             for step in light_steps:
                 if step.num_units > 1:
-                    self._steps += [Step(zeros, zeros, step.leds, step.unit, 1)] * step.num_units
+                    self._steps += [
+                        Step(zeros, zeros, step.leds, 1)
+                    ] * step.num_units
                 else:
-                    self._steps += [Step(zeros, zeros, step.leds, step.unit, 1)]
+                    self._steps += [Step(zeros, zeros, step.leds, 1)]
 
         # Notes:
         # - moves num_units >= 1
@@ -71,7 +67,9 @@ class Compose(object):
             # If there are any remaining steps in the move
             if unit_cnt != 0:
                 step = move_steps[step_i]
-                self._steps += [Step(step.motor_l, step.motor_r, zeros, step.unit, 1)] * round(step.num_units - unit_cnt)
+                self._steps += [
+                    Step(step.motor_l, step.motor_r, zeros, step.unit, 1)
+                ] * round(step.num_units - unit_cnt)
                 step_i += 1
 
             # No lights, add moves if they exist
@@ -81,14 +79,15 @@ class Compose(object):
                 for step in move_steps[step_i::]:
                     if step.num_units > 1:
                         # Expand composition list for steps lasting longer than a beat
-                        self._steps += [Step(step.motor_l, step.motor_r, zeros, step.unit, 1)] * step.num_units
+                        self._steps += [
+                            Step(step.motor_l, step.motor_r, zeros, 1)
+                        ] * step.num_units
                     else:
                         self._steps.append(
                             Step(
                                 step.motor_l,
                                 step.motor_r,
                                 zeros,
-                                step.unit,
                                 step.num_units,
                             )
                         )
@@ -105,11 +104,7 @@ class Compose(object):
         if not self._steps:
             return ""
 
-        if self._steps[0].unit == "beats":
-            header = ["Step", "Beats", "Count", "Left Motor", "Right Motor", "LEDs"]
-        elif self._steps[0].unit == "seconds":
-            header = ["Step", "Seconds", "Count", "Left Motor", "Right Motor", "LEDs"]
-
+        header = ["Step", "Beats", "Count", "Left Motor", "Right Motor", "LEDs"]
         format_row = "{:<6} {:<7} {:<7} {:<26} {:<26} {:<26}"
         lines.append(format_row.format(*header))
 
@@ -127,17 +122,10 @@ class Compose(object):
             )
             cnt += step.num_units
 
-        if self._steps[0].unit == "beats":
-            lines.append(
-                "Total: {} beats".format(
-                    round(sum([step.num_units for step in self._steps]))
-                )
+        lines.append(
+            "Total: {} beats".format(
+                round(sum([step.num_units for step in self._steps]))
             )
-        elif self._steps[0].unit == "seconds":
-            lines.append(
-                "Total: {} seconds".format(
-                    round(sum([step.num_units for step in self._steps]))
-                )
-            )
+        )
 
         return "\n".join(lines)

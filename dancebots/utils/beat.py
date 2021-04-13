@@ -1,9 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Beat module.
 
 """
 import librosa
+
 
 def get_beats(audio, sample_rate):
     """Get beat times from audio data

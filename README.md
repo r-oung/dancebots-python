@@ -1,6 +1,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Dancebots Python
+A Python 3 package for [DanceBots](https://www.dancebots.ch/).
 
 ## Example
 ```python
@@ -8,23 +9,20 @@ import dancebots as db
 from dancebots import Move
 
 # Move the robot
-move = Move("seconds") # Use 'seconds' as units. Options are "seconds" or "beats" (default)
-move.forward(3) # move forward for 3 seconds
-move.backward(3) # move backward for 3 seconds
-move.left(2) # turn left for 2 seconds
-move.right(2) # turn right for 2 seconds
+move = Move()
+move.forward(3) # move forward for 3 beats
+move.backward(3)  # move backward for 3 beats
+move.left(2)  # turn left for 2 beats
+move.right(2)  # turn right for 2 beats
 
 # Print to sequence of moves
 print(move)
 
 # Build audio file
-db.add(move) # add move
-db.save("01_sample.wav") # save to disk
-db.plot() # visualize the audio file
+db.add(move)  # add move
+db.save("01_sample.wav")  # save to disk
+db.plot()  # visualize the audio file
 ```
-
-## Prerequisites
-You will need Python 3.
 
 ## Dependencies
 This package relies on the packages listed in `requirements.txt`.
@@ -51,22 +49,20 @@ A frame is the smallest unit in the Dancebot protocol. It contains all of the in
 Frames are concatenated one after another, separated by a delimiter block, to form a bitstream.
 
 Bit representation is time-modulated (time between rising/falling edges) as follows:
--------------------------------------------------
-TYPE      | Ticks		| Interval (msec)
--------------------------------------------------
-DELIMITER |      > 5805 |          > 0.725625 
-    1     | 3367 - 5805	| 0.420875 - 0.725625
-    0     |      < 3367 |          < 0.420875
+| Type      | Ticks       | Interval (msec)     |
+|-----------|-------------|---------------------|
+| DELIMITER |      > 5805 |          > 0.725625 |
+|     1     | 3367 - 5805 | 0.420875 - 0.725625 |
+|     0     |      < 3367 |          < 0.420875 |
 
 where 1 tick represents one period of the microcontroller's clock, which in this case is 1/(8 MHz). Note that there is a built-in watchdog timer that needs to be kicked every < 500 msec. Otherwise the motors will automatically turn off.
 
 The following bit representation will be used in this package:
------------------------
-TYPE | Interval (msec)
------------------------
-DELIMITER | 2.0 
-    1     | 0.7
-    0     | 0.2
+| TYPE      | Interval (msec) |
+|-----------|-----------------|
+| DELIMITER |       2.0       |
+|     1     |       0.7       |
+|     0     |       0.2       |
 
 In the datagram illustration above, the motor byte consists of 8-bits:
 - Bits 0-6 are for speed with LSB sent first
@@ -84,8 +80,14 @@ In the datagram illustration above, the motor byte consists of 8-bits:
 
 
 ## Contributions
-* [Black](https://google.github.io/styleguide/pyguide.html)
-* [Pylint](https://pylint.org/)
+- [Black](https://google.github.io/styleguide/pyguide.html)
+- [Pylint](https://pylint.org/)
+
+## Unit Testing
+```
+cd tests/
+python -m unittest
+```
 
 ## Reference
 - [Firmware](https://github.com/philippReist/dancebots_electronics/blob/master/DancebotsFirmware/src/MP3DanceBot.c)

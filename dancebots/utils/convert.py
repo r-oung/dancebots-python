@@ -1,9 +1,7 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Conversion module.
 
 """
-import math
 from .waveform import sinewave
 from ..core import Frame, Bitstream
 
@@ -20,12 +18,12 @@ def step_to_frames(step, seconds_per_unit=1, sample_rate=44100):
 
     frame = Frame(step.motor_l, step.motor_r, step.leds)
     bitstream = Bitstream([frame], sample_rate)
-    repeat = math.floor(seconds_per_step / bitstream.duration)
+    repeat = int(seconds_per_step // bitstream.duration)  # floor division
 
     return [frame] * repeat
 
 
-def steps_to_bitstream(steps, beat_times=[], sample_rate=44100):
+def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
     """Convert steps to bitstream.
 
     Attributes:
@@ -34,7 +32,7 @@ def steps_to_bitstream(steps, beat_times=[], sample_rate=44100):
             sample_rate: Audio sampling rate (Hz).
     """
     # A. No beat synchronization
-    if not beat_times:
+    if beat_times is None:
         # Convert each step in a composition to a bitstream
         bitstream = Bitstream()
         for step in steps:

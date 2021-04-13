@@ -5,10 +5,12 @@ def readme():
     with open("README.md", "r") as f:
         return f.read()
 
+
 def requirements():
     with open("requirements.txt") as f:
-        req = [line.rstrip('\n') for line in f]
+        req = [line.rstrip("\n") for line in f]
         print(req)
+
 
 setuptools.setup(
     name="dancebots",
