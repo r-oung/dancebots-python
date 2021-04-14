@@ -4,7 +4,7 @@
 from dancebots import utils
 
 # Load song file
-audio, sample_rate = utils.load("../data/dance_demo.mp3")
+audio, sample_rate = utils.load("../data/sample.wav")
 
 # Get beats
 bpm, beat_times = utils.get_beats(audio, sample_rate)

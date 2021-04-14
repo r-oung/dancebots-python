@@ -39,7 +39,7 @@ def load(filename):
     # Extract beats
     print("Extracting beats...(be patient)")
     bpm, beat_times = utils.get_beats(audio, sample_rate)
-    print("Estimated tempo: {:.2f} BPM".format(bpm))
+    print("Estimated tempo: {:.2f} BPM ({:.2f} Hz)".format(bpm, bpm / 60))
 
     # Keep data in a buffer for plotting purposes
     channel_l = audio[0]

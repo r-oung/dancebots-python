@@ -58,9 +58,11 @@ def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
         time_index = len(bitstream) / float(sample_rate)
         if time_index < beat_times[beat_index]:
             # Off beat
-            bitstream.append_bits([0])
+            frame = Frame([0] * 8, [0] * 8, [0] * 8)
+            bitstream += Bitstream([frame])
         else:
             # On beat
+            # @TODO Only taking one step, but it should take multiple steps if beat < 1
             if step_index < len(steps):
                 frames = step_to_frames(steps[step_index], seconds_per_beat)
                 bitstream += Bitstream(frames)

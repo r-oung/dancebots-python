@@ -18,7 +18,7 @@ light.blink([1, 1, 1, 1, 1, 1, 1, 1], 10, 5)  # blink for 10 beats at 5 Hz
 light.hold([1, 1, 1, 1, 1, 1, 1, 1], 2)  # keep LEDs on for 2 beats
 
 # Build audio file
-db.load("../data/dance_demo.mp3")  # load music file
+db.load("../data/sample.wav")  # load music file
 db.add(twist)  # add moves
 db.add(light)  # add lights
 db.save("02_example.wav")  # save to disk
