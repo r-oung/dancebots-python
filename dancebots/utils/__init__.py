@@ -1,7 +1,8 @@
-"""Utilities package"""
-from . import beat
+# -*- coding: utf-8 -*-
+"""Utilities package.
+
+"""
 from . import convert
-from . import inout
 from . import waveform
 
 from .beat import get_beats

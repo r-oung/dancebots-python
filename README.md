@@ -1,7 +1,16 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-# Dancebots Python
-A Python 3 package for [DanceBots](https://www.dancebots.ch/).
+# ![Dancebots logo](docs/applogo.svg)Dancebots Python
+A Python 3 package for [Dancebots](https://www.dancebots.ch/).
+
+
+## Setup
+If you are downloading from source:
+```shell
+cd dancebots-python/
+pip install -e .
+```
+
 
 ## Example
 ```python
@@ -24,20 +33,6 @@ db.save("01_sample.wav")  # save to disk
 db.plot()  # visualize the audio file
 ```
 
-## Dependencies
-This package relies on the packages listed in `requirements.txt`.
-
-## Virtual Environments
-It is recommended to use a Python virtual environment when working with dependencies. A `setup.sh` script is provided in the root directory that will automatically create a virtual environment and install all necessary dependencies (Linux and macOS only):
-```
-cd dancebots-python/
-./setup.sh
-```
-
-Activate the virtual environment:
-```
-source venv/bin/activate
-```
 
 ## Protocol Description
 A frame is the smallest unit in the Dancebot protocol. It contains all of the information necessary to drive the motors and LEDs. It consists of 24-bits:
@@ -81,14 +76,18 @@ In the datagram illustration above, the motor byte consists of 8-bits:
 
 
 ## Contributions
+The following (default configurations) are used:
 - [Black](https://google.github.io/styleguide/pyguide.html)
 - [Pylint](https://pylint.org/)
 
-## Unit Testing
-```
+[Semantic versioning](https://semver.org/) is used.
+
+### Unit Tests
+```shell
 cd tests/
 python -m unittest
 ```
+
 
 ## Reference
 - [Firmware](https://github.com/philippReist/dancebots_electronics/blob/master/DancebotsFirmware/src/MP3DanceBot.c)

@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Motor test.
+"""Create move test file.
 
 """
 import dancebots as db
@@ -25,5 +23,4 @@ test2.forward(DURATION)
 # Build audio file
 db.add(test1)
 db.add(test2)
-db.save("07_sample.wav")
-db.plot()
+db.save("test_move.wav")

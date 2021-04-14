@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Move the robot.
+
+"""
 import dancebots as db
 from dancebots import Move
 
@@ -15,5 +16,7 @@ print(move)
 
 # Build audio file
 db.add(move)  # add move
-db.save("01_sample.wav")  # save to disk
-db.plot()  # visualize the audio file
+db.save("01_example.wav")  # save to disk
+
+# Visualize audio file
+db.plot()

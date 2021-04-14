@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Light test.
+"""Create light test.
 
 """
 import dancebots as db
@@ -28,5 +26,4 @@ test2.blink([1] * 8, DURATION, 10)
 # Build audio file
 db.add(test1)
 db.add(test2)
-db.save("08_sample.wav")
-db.plot()
+db.save("test_light.wav")

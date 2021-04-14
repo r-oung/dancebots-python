@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
+# pylint: disable=C0103, W0603
 """Dancebots package.
 
 Package to script movement and lights for a DanceBot.
 """
+__version__ = "1.0.0"
 from . import core
 from . import utils
 
 from .core import Move
 from .core import Light
 
-# pylint: disable=C0103
-# pylint: disable=W0603
 
 # Global variables
 audio = []
@@ -108,7 +109,7 @@ def save(filename="output.wav", audio_channel="left"):
         else:
             raise ValueError("Invalid audio channel")
 
-    print("Constructing audio file...")
+    print("Building audio file...")
     utils.create_wav(
         channel_l=channel_l,
         channel_r=channel_r,

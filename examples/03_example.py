@@ -1,12 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Visualize frame.
+"""Visualize frames.
 
 """
 from dancebots.core import Frame
 import dancebots.utils.plot as plot
 
-# Set the individual bits for the motors and LEDs
+# Create a single frame
 motor_l = [0, 1, 0, 0, 1, 1, 0, 1]
 motor_r = [0, 1, 0, 0, 1, 1, 0, 1]
 leds = [0] * 8
@@ -19,4 +17,4 @@ frames = [frame] * 100
 print(frame)
 
 # Visualize frames
-plot(channel_l=frames, channel_r=None, sample_rate=44100, xlim=[0.051, 0.069])
+plot(frames)

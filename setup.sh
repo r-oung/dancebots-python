@@ -22,7 +22,7 @@ fi
 . "${VENV_PATH}/bin/activate"
 
 # Install requirements
-pip install -r requirements.txt
+# pip install -r requirements.txt
 
 # Install private package in editing mode
 pip install -e .

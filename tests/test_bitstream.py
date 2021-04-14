@@ -49,18 +49,18 @@ class TestBitstream(unittest.TestCase):
         bitstream2 = Bitstream([self.frame1])
         total = bitstream1 + bitstream2
 
-        self.assertEqual(len(bitstream1), 416)
-        self.assertEqual(len(bitstream2), 416)
-        self.assertEqual(len(total), 832)
+        self.assertEqual(len(bitstream1), 496)
+        self.assertEqual(len(bitstream2), 496)
+        self.assertEqual(len(total), 992)
 
     def test_properties(self):
         bitstream = Bitstream([self.frame1])
-        self.assertEqual(len(bitstream.bits), 416)
+        self.assertEqual(len(bitstream.bits), 496)
         self.assertListEqual(bitstream.frames, [self.frame1])
         self.assertEqual(bitstream.sample_rate, 44100)
 
         bitstream = Bitstream([self.frame1, self.frame2], 48000)
-        self.assertEqual(len(bitstream.bits), 912)
+        self.assertEqual(len(bitstream.bits), 1080)
         self.assertListEqual(bitstream.frames, [self.frame1, self.frame2])
         self.assertEqual(bitstream.sample_rate, 48000)
 

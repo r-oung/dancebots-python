@@ -37,13 +37,13 @@ class TestMove(unittest.TestCase):
         move = Move()
 
         motor_l, motor_r = move.forward(1, 100)
-        self.assertListEqual(motor_l, [1, 1, 1, 1, 1, 1, 1, 1])
-        self.assertListEqual(motor_r, [1, 1, 1, 1, 1, 1, 1, 1])
+        self.assertListEqual(motor_l, [0, 0, 1, 0, 0, 1, 1, 1])
+        self.assertListEqual(motor_r, [0, 0, 1, 0, 0, 1, 1, 1])
 
         move.clear()
         motor_l, motor_r = move.forward(1, 50)
-        self.assertListEqual(motor_l, [0, 0, 0, 0, 0, 0, 1, 1])
-        self.assertListEqual(motor_r, [0, 0, 0, 0, 0, 0, 1, 1])
+        self.assertListEqual(motor_l, [0, 1, 0, 0, 1, 1, 0, 1])
+        self.assertListEqual(motor_r, [0, 1, 0, 0, 1, 1, 0, 1])
 
         move.clear()
         motor_l, motor_r = move.forward(1, 0)
@@ -52,13 +52,13 @@ class TestMove(unittest.TestCase):
 
         move.clear()
         motor_l, motor_r = move.backward(1, 100)
-        self.assertListEqual(motor_l, [1, 1, 1, 1, 1, 1, 1, 0])
-        self.assertListEqual(motor_r, [1, 1, 1, 1, 1, 1, 1, 0])
+        self.assertListEqual(motor_l, [0, 0, 1, 0, 0, 1, 1, 0])
+        self.assertListEqual(motor_r, [0, 0, 1, 0, 0, 1, 1, 0])
 
         move.clear()
         motor_l, motor_r = move.backward(1, 50)
-        self.assertListEqual(motor_l, [0, 0, 0, 0, 0, 0, 1, 0])
-        self.assertListEqual(motor_r, [0, 0, 0, 0, 0, 0, 1, 0])
+        self.assertListEqual(motor_l, [0, 1, 0, 0, 1, 1, 0, 0])
+        self.assertListEqual(motor_r, [0, 1, 0, 0, 1, 1, 0, 0])
 
         move.clear()
         motor_l, motor_r = move.backward(1, 0)
@@ -67,13 +67,13 @@ class TestMove(unittest.TestCase):
 
         move.clear()
         motor_l, motor_r = move.left(1, 100)
-        self.assertListEqual(motor_l, [1, 1, 1, 1, 1, 1, 1, 0])
-        self.assertListEqual(motor_r, [1, 1, 1, 1, 1, 1, 1, 1])
+        self.assertListEqual(motor_l, [0, 0, 1, 0, 0, 1, 1, 0])
+        self.assertListEqual(motor_r, [0, 0, 1, 0, 0, 1, 1, 1])
 
         move.clear()
         motor_l, motor_r = move.left(1, 50)
-        self.assertListEqual(motor_l, [0, 0, 0, 0, 0, 0, 1, 0])
-        self.assertListEqual(motor_r, [0, 0, 0, 0, 0, 0, 1, 1])
+        self.assertListEqual(motor_l, [0, 1, 0, 0, 1, 1, 0, 0])
+        self.assertListEqual(motor_r, [0, 1, 0, 0, 1, 1, 0, 1])
 
         move.clear()
         motor_l, motor_r = move.left(1, 0)
@@ -82,13 +82,13 @@ class TestMove(unittest.TestCase):
 
         move.clear()
         motor_l, motor_r = move.right(1, 100)
-        self.assertListEqual(motor_l, [1, 1, 1, 1, 1, 1, 1, 1])
-        self.assertListEqual(motor_r, [1, 1, 1, 1, 1, 1, 1, 0])
+        self.assertListEqual(motor_l, [0, 0, 1, 0, 0, 1, 1, 1])
+        self.assertListEqual(motor_r, [0, 0, 1, 0, 0, 1, 1, 0])
 
         move.clear()
         motor_l, motor_r = move.right(1, 50)
-        self.assertListEqual(motor_l, [0, 0, 0, 0, 0, 0, 1, 1])
-        self.assertListEqual(motor_r, [0, 0, 0, 0, 0, 0, 1, 0])
+        self.assertListEqual(motor_l, [0, 1, 0, 0, 1, 1, 0, 1])
+        self.assertListEqual(motor_r, [0, 1, 0, 0, 1, 1, 0, 0])
 
         move.clear()
         motor_l, motor_r = move.right(1, 0)
