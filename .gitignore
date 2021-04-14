@@ -148,3 +148,4 @@ cython_debug/
 # Private
 archive/
 reference/
+.vscode/

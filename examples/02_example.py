@@ -6,7 +6,7 @@ from dancebots import Move, Light
 
 # Create a move
 twist = Move()  # call the move 'twist'
-for i in range(50):  # repeat the following 50 times
+for i in range(10):  # repeat the following 10 times
     twist.left(1)  # move left for 1 beat
     twist.right(1)  # move right for 1 beat
 
