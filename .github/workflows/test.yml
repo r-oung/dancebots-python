@@ -28,11 +28,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        cd python
         pip install .
 
     - name: Runs unit tests
       run: |
-        cd python/tests
+        cd tests/
         python -m unittest
