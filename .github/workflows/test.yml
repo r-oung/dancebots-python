@@ -1,36 +1,36 @@
-name: Test Build
+# name: Test Build
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-      - devel
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+#       - devel
 
-jobs:
-  build:
-    name: Python ${{ matrix.python_version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-        python_version: ['3.6', '3.7', '3.8', '3.9']
+# jobs:
+#   build:
+#     name: Python ${{ matrix.python_version }} on ${{ matrix.os }}
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         os: [ubuntu-latest, macOS-latest, windows-latest]
+#         python_version: ['3.6', '3.7', '3.8', '3.9']
 
-    steps:
-    - uses: actions/checkout@v2
+#     steps:
+#     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python_version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python_version }}
+#     - name: Set up Python ${{ matrix.python_version }}
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: ${{ matrix.python_version }}
 
-    - name: Install dependencies
-      run: |
-        pip install .
+#     - name: Install dependencies
+#       run: |
+#         pip install .
 
-    - name: Runs unit tests
-      run: |
-        cd tests/
-        python -m unittest
+#     - name: Runs unit tests
+#       run: |
+#         cd tests/
+#         python -m unittest

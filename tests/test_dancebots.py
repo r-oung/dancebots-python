@@ -5,7 +5,7 @@ import os
 import dancebots as db
 from dancebots import Move, Light
 
-INPUT_WAV = "./assets/motor_test.wav"
+INPUT_WAV = "./data/sample.wav"
 OUTPUT_WAV = "test.wav"
 
 
