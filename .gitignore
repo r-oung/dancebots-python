@@ -144,7 +144,6 @@ cython_debug/
 
 # WAV files
 examples/*.wav
-tests/*.wav
 
 # Private
 archive/

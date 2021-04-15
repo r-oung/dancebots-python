@@ -35,6 +35,7 @@ db.plot()  # visualize the audio file
 
 More examples can be found in the `examples` folder.
 
+
 ## Protocol Description
 A frame is the smallest unit in the Dancebot protocol. It contains all of the information necessary to drive the motors and LEDs. It consists of 24-bits:
 ```

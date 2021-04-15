@@ -6,23 +6,6 @@ from .waveform import sinewave
 from ..core import Frame, Bitstream
 
 
-def step_to_frames(step, seconds_per_unit=1, sample_rate=44100):
-    """Convert step to frames.
-
-    Attributes:
-            step: Step object.
-            seconds_per_unit: Number of seconds per unit.
-            sample_rate: Audio sampling rate (Hz).
-    """
-    seconds_per_step = step.num_units * seconds_per_unit
-
-    frame = Frame(step.motor_l, step.motor_r, step.leds)
-    bitstream = Bitstream([frame], sample_rate)
-    repeat = int(seconds_per_step // bitstream.duration)  # floor division
-
-    return [frame] * repeat
-
-
 def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
     """Convert steps to bitstream.
 
@@ -36,40 +19,33 @@ def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
         # Convert each step in a composition to a bitstream
         bitstream = Bitstream()
         for step in steps:
-            frames = step_to_frames(step)
-            bitstream += Bitstream(frames)
+            frame = Frame(step.motor_l, step.motor_r, step.leds)
+            bitstream = Bitstream([frame], sample_rate)
+            repeat = int(step.num_units // bitstream.duration) # 1 unit = 1 second
+            bitstream += Bitstream([frame] * repeat)
 
         return bitstream.bits
 
     # B. With beat synchronization
-    # Get average seconds per beat
-    # Used to estimate the period of a step
-    total = 0
-    for i in range(1, len(beat_times)):
-        total += beat_times[i] - beat_times[i - 1]
-    seconds_per_beat = total / (len(beat_times) - 1)
-
-    # Initialize indices
     beat_index = 0
-    step_index = 0
     bitstream = Bitstream()
 
-    while beat_index < len(beat_times):
-        time_index = len(bitstream) / float(sample_rate)
-        if time_index < beat_times[beat_index]:
-            # Off beat
-            frame = Frame([0] * 8, [0] * 8, [0] * 8)
-            bitstream += Bitstream([frame])
+    # Pad with empty frames until the first beat
+    while (len(bitstream) / float(sample_rate)) < beat_times[0]:
+        frame = Frame([0] * 8, [0] * 8, [0] * 8)
+        bitstream += Bitstream([frame])
+    
+    # Insert steps that are synchronized to beats
+    for beat_index, step in enumerate(steps, 1):
+        if beat_index < len(beat_times):
+            # Insert step at each beat
+            while (len(bitstream) / float(sample_rate)) < beat_times[beat_index]:
+                frame = Frame(step.motor_l, step.motor_r, step.leds)
+                bitstream += Bitstream([frame], sample_rate)
         else:
-            # On beat
-            # @TODO Only taking one step, but it should take multiple steps if beat < 1
-            if step_index < len(steps):
-                frames = step_to_frames(steps[step_index], seconds_per_beat)
-                bitstream += Bitstream(frames)
-                step_index += 1
-
-            beat_index += 1
-
+            # No more beats
+            break
+    
     return bitstream.bits
 
 

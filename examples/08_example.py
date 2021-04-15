@@ -21,4 +21,4 @@ db.load("../data/sample.wav")  # load music file
 # db.add(twist)  # add moves
 db.add(light)  # add lights
 db.save("08_example.wav")  # save to disk
-
+db.plot()
