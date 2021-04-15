@@ -133,11 +133,14 @@ def plot():
         raise ValueError("You must first load and/or save an audio file")
 
     if beat_times is None:
-        utils.plot(channel_l=channel_l, channel_r=channel_r, sample_rate=sample_rate)
+        utils.plot(
+            channel_l=channel_l,
+            channel_r=channel_r,
+            sample_rate=sample_rate)
     else:
         utils.plot(
             channel_l=channel_l,
             channel_r=channel_r,
+            beat_times=beat_times,
             sample_rate=sample_rate,
-            xlim=[beat_times[0], beat_times[0] + 1],
         )

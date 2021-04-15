@@ -1,6 +1,5 @@
 # TODO
 
 ## Maintenance
-- Add a unit test to test that bitstream conversion with beats works properly
+- Unit tests are not catching step-to-bitstream conversion errors
 - Remove `librosa`? It requires `ffmpeg` and `libsndfile`, which complicates installations
-

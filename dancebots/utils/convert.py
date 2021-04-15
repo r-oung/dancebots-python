@@ -15,19 +15,18 @@ def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
             sample_rate: Audio sampling rate (Hz).
     """
     # A. No beat synchronization
+    # Let 1 unit = 1 second
     if beat_times is None:
         # Convert each step in a composition to a bitstream
         bitstream = Bitstream()
         for step in steps:
             frame = Frame(step.motor_l, step.motor_r, step.leds)
-            bitstream = Bitstream([frame], sample_rate)
-            repeat = int(step.num_units // bitstream.duration) # 1 unit = 1 second
+            repeat = int(step.num_units // Bitstream([frame], sample_rate).duration)
             bitstream += Bitstream([frame] * repeat)
 
         return bitstream.bits
 
     # B. With beat synchronization
-    beat_index = 0
     bitstream = Bitstream()
 
     # Pad with empty frames until the first beat
@@ -36,12 +35,21 @@ def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
         bitstream += Bitstream([frame])
     
     # Insert steps that are synchronized to beats
-    for beat_index, step in enumerate(steps, 1):
+    beat_index = 1
+    end_step = beat_times[0]
+    for step in steps:
         if beat_index < len(beat_times):
-            # Insert step at each beat
-            while (len(bitstream) / float(sample_rate)) < beat_times[beat_index]:
+            # Estimate when step should end
+            end_step += step.num_units * (beat_times[beat_index] - beat_times[beat_index - 1])
+            
+            # Insert step
+            while (len(bitstream) / float(sample_rate)) < end_step:
                 frame = Frame(step.motor_l, step.motor_r, step.leds)
                 bitstream += Bitstream([frame], sample_rate)
+            
+            # Check if beat index should be incremented
+            if (len(bitstream) / float(sample_rate)) > beat_times[beat_index]:
+                beat_index += 1
         else:
             # No more beats
             break

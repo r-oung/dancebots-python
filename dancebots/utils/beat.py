@@ -2,7 +2,6 @@
 """Beat module.
 
 """
-import librosa
 
 
 def get_beats(audio, sample_rate):
@@ -12,6 +11,8 @@ def get_beats(audio, sample_rate):
             audio: librosa audio data format.
             sample_rate: Audio data sampling rate (Hz).
     """
+    import librosa
+
     # Convert to mono
     mono = librosa.to_mono(audio)
 

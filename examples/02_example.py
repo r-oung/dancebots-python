@@ -14,7 +14,7 @@ for i in range(10):  # repeat the following 10 times
 light = Light()
 
 # Each element in the list represents a single LED (OFF=0, ON=1)
-light.blink([1, 1, 1, 1, 1, 1, 1, 1], 10, 5)  # blink for 10 beats at 5 Hz
+light.blink([1, 1, 1, 1, 1, 1, 1, 1], 10, 4)  # blink for 10 beats at 4 Hz
 light.hold([1, 1, 1, 1, 1, 1, 1, 1], 2)  # keep LEDs on for 2 beats
 
 # Build audio file

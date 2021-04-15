@@ -4,10 +4,8 @@
 """
 import wave
 import struct
-import librosa
 from itertools import cycle
 
-# import youtube_dl as yt
 
 def load(filename):
     """Load audio file.
@@ -15,6 +13,8 @@ def load(filename):
     Attributes:
             filename: Path to audio file.
     """
+    import librosa
+
     # Load audio file without any modifications to the sampling rate
     # https://librosa.org/doc/latest/generated/librosa.load.html
     audio, sample_rate = librosa.load(filename, sr=None, mono=False)
@@ -63,22 +63,3 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
 
         binary_string = b"".join(binary_list)
         wav_file.writeframes(binary_string)
-
-
-# def get_youtube(url):
-#     options = {
-#         "format": "bestaudio/best",
-#         "postprocessors": [
-#             {
-#                 "key": "FFmpegExtractAudio",
-#                 "preferredcodec": "wav",
-#                 "preferredquality": "192",
-#             }
-#         ],
-#     }
-
-#     with yt.YoutubeDL(options) as ytdl:
-#         print ("Downloading: {}".format(url))
-#         ytdl.download([url])
-
-#     return

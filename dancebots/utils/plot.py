@@ -50,7 +50,7 @@ def plot1ch(data, sample_rate=44100, xlim=None):
     plt.show()
 
 
-def plot2ch(channel_l, channel_r=None, sample_rate=44100, xlim=None):
+def plot2ch(channel_l, channel_r=None, beat_times=None, sample_rate=44100, xlim=None):
     """Plot dual channel time-series data.
 
     Attributes:
@@ -70,13 +70,15 @@ def plot2ch(channel_l, channel_r=None, sample_rate=44100, xlim=None):
     for sample in range(len(channel_l)):
         time.append(sample / float(sample_rate))  # [seconds]
 
-    if xlim is None:
-        xlim = [0.00, 0.015]
+    # if xlim is None:
+    #     xlim = [0.00, 0.015]
 
     # @TODO Restrict panning in y-axis
     # https://stackoverflow.com/questions/16705452/matplotlib-forcing-pan-zoom-to-constrain-to-x-axes
     ax1 = plt.subplot(211)
     plt.plot(time, channel_l)
+    if beat_times is not None:
+        plt.vlines(x=beat_times, ymin=-1, ymax=+1, colors="red", label="beats")
     plt.ylabel("Left Channel")
 
     _ = plt.subplot(212, sharex=ax1, sharey=ax1)
@@ -89,7 +91,7 @@ def plot2ch(channel_l, channel_r=None, sample_rate=44100, xlim=None):
     plt.show()
 
 
-def plot(channel_l, channel_r=None, sample_rate=44100, xlim=None):
+def plot(channel_l, channel_r=None, beat_times=None, sample_rate=44100, xlim=None):
     """Plot time-series data.
 
     Attributes:
@@ -101,4 +103,4 @@ def plot(channel_l, channel_r=None, sample_rate=44100, xlim=None):
     if channel_r is None:
         plot1ch(channel_l, sample_rate, xlim)
     else:
-        plot2ch(channel_l, channel_r, sample_rate, xlim)
+        plot2ch(channel_l, channel_r, beat_times, sample_rate, xlim)

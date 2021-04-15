@@ -68,7 +68,7 @@ class Compose:
             if unit_cnt != 0:
                 step = move_steps[step_i]
                 self._steps += [
-                    Step(step.motor_l, step.motor_r, zeros, step.unit, 1)
+                    Step(step.motor_l, step.motor_r, zeros, 1)
                 ] * round(step.num_units - unit_cnt)
                 step_i += 1
 

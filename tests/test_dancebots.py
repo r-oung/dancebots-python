@@ -25,8 +25,6 @@ class TestDancebots(unittest.TestCase):
         move.right(2)
         move.stop(1)
 
-        print(move)
-
         db.add(move)
         db.save(OUTPUT_WAV)
 
@@ -38,8 +36,6 @@ class TestDancebots(unittest.TestCase):
         light.hold([1, 0, 1, 0, 1, 0, 1, 0], 2)
         light.stop(1)
 
-        print(light)
-
         db.add(light)
         db.save(OUTPUT_WAV)
 
@@ -48,18 +44,33 @@ class TestDancebots(unittest.TestCase):
         for _ in range(5):
             move.left(1)
             move.right(1)
-        print(move)
 
         light = Light()
         light.blink([0, 1, 0, 1, 0, 1, 0, 1], 5)
         light.blink([1, 0, 1, 0, 1, 0, 1, 0], 5)
         light.hold([1, 0, 1, 0, 1, 0, 1, 0], 2)
-        print(light)
 
         db.load(INPUT_WAV)
-        db.add(move)  # add moves
-        db.add(light)  # add lights
-        db.save(OUTPUT_WAV)  # save to disk
+        db.add(move)
+        db.add(light)
+        db.save(OUTPUT_WAV)
+    
+    def example_08(self):
+        move = Move()
+        for _ in range(10):
+            move.left(2)
+            move.right(2)
+
+        light = Light()
+        light.blink([1] * 8, 20, 4)
+        light.hold([1] * 8, 2)
+        light.hold([0] * 8, 1)
+        light.hold([1] * 8, 2)
+
+        db.load(INPUT_WAV)
+        db.add(move)
+        db.add(light)
+        db.save(OUTPUT_WAV)
 
 
 if __name__ == "__main__":
