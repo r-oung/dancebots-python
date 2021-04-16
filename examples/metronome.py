@@ -25,4 +25,4 @@ utils.create_wav(
     filename="metronome.wav",
     sample_rate=sample_rate,
 )
-print("Done")
+print("Done!")

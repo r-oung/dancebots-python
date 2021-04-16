@@ -22,7 +22,7 @@ class Step:
         self._num_units = num_units  # number of units
 
         if num_units < 0:
-            raise ValueError("num_units must be a positive value")
+            raise ValueError("👎 num_units must be a positive value")
 
     @property
     def motor_l(self):

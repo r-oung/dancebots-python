@@ -15,25 +15,25 @@ class Frame:
 
     def __init__(self, motor_l, motor_r, leds):
         if len(motor_l) != 8:
-            raise ValueError("Left motor must contain 8 values")
+            raise ValueError("👎 Left motor must contain 8 values")
 
         if len(motor_r) != 8:
-            raise ValueError("Right motor must contain 8 values")
+            raise ValueError("👎 Right motor must contain 8 values")
 
         if len(leds) != 8:
-            raise ValueError("LEDs must contain 8 values")
+            raise ValueError("👎 LEDs must contain 8 values")
 
         for bit in motor_l:
             if bit not in (0, 1):
-                raise ValueError("motor_l must be either 0 or 1")
+                raise ValueError("👎 motor_l must be either 0 or 1")
 
         for bit in motor_r:
             if bit not in (0, 1):
-                raise ValueError("motor_r must be either 0 or 1")
+                raise ValueError("👎 motor_r must be either 0 or 1")
 
         for bit in leds:
             if bit not in (0, 1):
-                raise ValueError("leds must be either 0 or 1")
+                raise ValueError("👎 leds must be either 0 or 1")
 
         self._motor_l = motor_l
         self._motor_r = motor_r

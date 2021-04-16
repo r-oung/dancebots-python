@@ -1,7 +1,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Dancebots Python
-A Python 3 package for [Dancebots](https://www.dancebots.ch/) 🤖.
+A Python 3 package for [Dancebots](https://www.dancebots.ch/) 🕺💃🤖.🎉✨
 
 
 ## Installation
@@ -24,10 +24,11 @@ git clone https://github.com/r-oung/dancebots-python.git
 pip install -e dancebots-python/
 ```
 
+
 ### Dependencies
 The package uses [librosa](https://github.com/librosa/librosa) for reading MP3 files and beat detection, which means:
 - If you don't plan to synchronize your compositions with music, then there shouldn't be any problem. 
-- If you are going to synchronize your compomsition with music, then you'll need to install [ffmpeg](https://www.ffmpeg.org/) or [gstreamer](https://gstreamer.freedesktop.org/). Refer to [this link](https://github.com/librosa/librosa#hints-for-the-installation) for installation hints.
+- If you're going to synchronize your composition with music, then you'll need to install [ffmpeg](https://www.ffmpeg.org/) or [gstreamer](https://gstreamer.freedesktop.org/). Refer to [this link](https://github.com/librosa/librosa#hints-for-the-installation) for installation hints.
 
 
 ## Example

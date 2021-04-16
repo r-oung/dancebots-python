@@ -17,22 +17,19 @@ def plot1ch(data, sample_rate=44100, xlim=None):
     """
     bits = []
     if isinstance(data, Frame):
-        print("Printing Frames")
         bits = Bitstream([data], sample_rate).bits
     elif isinstance(data, Bitstream):
-        print("Printing Bitstream")
         bits = data.bits
         sample_rate = data.sample_rate
     elif isinstance(data, list):
         if isinstance(data[0], Frame):
             bits = Bitstream(data, sample_rate).bits
         elif isinstance(data[0], int):
-            print("Printing List")
             bits = data
         else:
-            raise ValueError("Unsupported data type")
+            raise ValueError("👎 Unsupported data type")
     else:
-        raise ValueError("Unsupported data type")
+        raise ValueError("👎 Unsupported data type")
 
     time = []
     for sample in range(len(bits)):
@@ -58,7 +55,7 @@ def plot2ch(channel_l, channel_r=None, beat_times=None, sample_rate=44100, xlim=
     """
     if len(channel_l) != len(channel_r):
         raise ValueError(
-            "Left and right channel lists must be of equal length: ({}, {})".format(
+            "👎 Left and right channel lists must be of equal length: ({}, {})".format(
                 len(channel_l), len(channel_r)
             )
         )

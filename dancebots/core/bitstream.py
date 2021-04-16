@@ -22,14 +22,14 @@ class Bitstream:
         if frames is not None:
             for frame in frames:
                 if not isinstance(frame, Frame):
-                    raise TypeError("Must be of type Frame")
+                    raise TypeError("👎 Must be of type Frame")
 
             self._frames = frames
         else:
             self._frames = []
 
         if sample_rate <= 0 or not isinstance(sample_rate, int):
-            raise ValueError("Sample rate must be a positive integer")
+            raise ValueError("👎 Sample rate must be a positive integer")
 
         self._sample_rate = sample_rate
         self._last_value = 1
@@ -54,14 +54,14 @@ class Bitstream:
                 elif bit == 1:
                     self._append(self._ONE)
                 else:
-                    raise ValueError("Frame must contain binary values, i.e. 0 or 1")
+                    raise ValueError("👎 Frame must contain binary values, i.e. 0 or 1")
 
     def __len__(self):
         return len(self._bits)
 
     def __add__(self, other):
         if self._sample_rate != other.sample_rate:
-            raise ValueError("Sampling rates are different")
+            raise ValueError("👎 Sampling rates are different")
 
         new_frames = self._frames.copy()
         new_frames = new_frames + other.frames
@@ -75,7 +75,7 @@ class Bitstream:
 
     def __iadd__(self, other):
         if self._sample_rate != other.sample_rate:
-            raise ValueError("Sampling rates are different")
+            raise ValueError("👎 Sampling rates are different")
 
         self._frames += other.frames
         self._convert_frames_to_bits(other.frames)

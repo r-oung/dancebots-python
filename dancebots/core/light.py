@@ -18,14 +18,14 @@ class Light:
 
     def _append_step(self, num_units, leds):
         if num_units < 0:
-            raise ValueError("num_units must be a positive value")
+            raise ValueError("👎 num_units must be a positive value")
 
         if len(leds) != 8:
-            raise ValueError("led list must contain 8 values")
+            raise ValueError("👎 led list must contain 8 values")
 
         for led in leds:
             if led not in (0, 1):
-                raise ValueError("led value must be either 0 or 1")
+                raise ValueError("👎 led value must be either 0 or 1")
 
         self._steps.append(Step([0] * 8, [0] * 8, leds, num_units))
 
@@ -37,10 +37,10 @@ class Light:
                 freq: Blink/toggling frequency (per unit)
         """
         if num_units < 1 or not isinstance(num_units, int):
-            raise ValueError("num_units must be a positive integer")
+            raise ValueError("👎 num_units must be a positive integer")
 
         if freq < 1 or not isinstance(freq, int):
-            raise ValueError("freq must be a positive integer")
+            raise ValueError("👎 freq must be a positive integer")
 
         num_steps = num_units * freq
         for _ in range(num_steps):

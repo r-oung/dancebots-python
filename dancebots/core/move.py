@@ -23,17 +23,17 @@ class Move:
 
     def _append_step(self, num_units, motor_l, motor_r):
         if num_units < 1 or not isinstance(num_units, int):
-            raise ValueError("num_units must be a positive integer")
+            raise ValueError("👎 num_units must be a positive integer")
 
         self._steps.append(Step(motor_l, motor_r, [0] * 8, num_units))
 
     def _motor(self, speed, direction):
         """Convert speed and direction to binary list"""
         if speed > self._SPEED_MAX or speed < self._SPEED_MIN:
-            raise ValueError("Speed must be a value between 0 and 100")
+            raise ValueError("👎 Speed must be a value between 0 and 100")
 
         if direction not in (self._FORWARD, self._BACKWARD):
-            raise ValueError("Direction must be either 0 or 1")
+            raise ValueError("👎 Direction must be either 0 or 1")
 
         # Convert decimal to binary list, with LSB first
         binary_list = [0] * 8

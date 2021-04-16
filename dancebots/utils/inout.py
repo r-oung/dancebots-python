@@ -37,7 +37,7 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
     """
     if len(channel_l) != len(channel_r):
         raise ValueError(
-            "Left and right channel lists must be of equal length: ({}, {})".format(
+            "👎 Left and right channel lists must be of equal length: ({}, {})".format(
                 len(channel_l), len(channel_r)
             )
         )
