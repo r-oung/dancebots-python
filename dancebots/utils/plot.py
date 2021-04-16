@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Plot module.
 
-@TODO Show the start of a frame, left/right motor, and LEDs
-- Guide: https://matplotlib.org/stable/tutorials/index.html
-- Annotations: https://matplotlib.org/stable/tutorials/text/annotations.html#sphx-glr-tutorials-text-annotations-py
 """
 import matplotlib.pyplot as plt
 from ..core import Frame, Bitstream

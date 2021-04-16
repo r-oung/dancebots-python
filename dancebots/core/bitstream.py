@@ -12,6 +12,7 @@ class Bitstream:
         frames: A list of Frame objects.
         sample_rate: Audio sampling-rate (Hz)
     """
+
     # Static variables
     _DELIMITER = 2.0  # delimiter bit duration [msec]
     _ONE = 0.6  # one bit duration [msec]

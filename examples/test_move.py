@@ -4,7 +4,7 @@
 import dancebots as db
 from dancebots import Move
 
-DURATION = 2 # [sec]
+DURATION = 2  # [sec]
 
 # Test speed
 test1 = Move()

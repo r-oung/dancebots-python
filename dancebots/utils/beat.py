@@ -11,6 +11,7 @@ def get_beats(audio, sample_rate):
             audio: librosa audio data format.
             sample_rate: Audio data sampling rate (Hz).
     """
+    # pylint: disable=C0415
     import librosa
 
     # Convert to mono

@@ -35,9 +35,7 @@ class Compose:
 
             for step in light_steps:
                 if step.num_units > 1:
-                    self._steps += [
-                        Step(zeros, zeros, step.leds, 1)
-                    ] * step.num_units
+                    self._steps += [Step(zeros, zeros, step.leds, 1)] * step.num_units
                 else:
                     self._steps += [Step(zeros, zeros, step.leds, step.num_units)]
 
@@ -67,9 +65,9 @@ class Compose:
             # If there are any remaining steps in the move
             if unit_cnt != 0:
                 step = move_steps[step_i]
-                self._steps += [
-                    Step(step.motor_l, step.motor_r, zeros, 1)
-                ] * round(step.num_units - unit_cnt)
+                self._steps += [Step(step.motor_l, step.motor_r, zeros, 1)] * round(
+                    step.num_units - unit_cnt
+                )
                 step_i += 1
 
             # No lights, add moves if they exist

@@ -54,7 +54,7 @@ class TestDancebots(unittest.TestCase):
         db.add(move)
         db.add(light)
         db.save(OUTPUT_WAV)
-    
+
     def example_08(self):
         move = Move()
         for _ in range(10):

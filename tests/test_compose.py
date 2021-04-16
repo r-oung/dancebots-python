@@ -42,12 +42,12 @@ class TestCompose(unittest.TestCase):
         light.blink([0, 1, 0, 1, 0, 1, 0, 1], 3, 2)
         composition = Compose(lights=[light])
         self.assertEqual(composition.steps[0].num_units, 0.5)
-        
+
         light = Light()
         light.blink([0, 1, 0, 1, 0, 1, 0, 1], 3, 4)
         composition = Compose(lights=[light])
         self.assertEqual(composition.steps[0].num_units, 0.25)
-        
+
     def test_print(self):
         compose = Compose(
             moves=[self.move1, self.move2], lights=[self.light1, self.light2]

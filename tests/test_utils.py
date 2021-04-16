@@ -17,7 +17,7 @@ class TestUtils(unittest.TestCase):
 
         # 1. Moves only
         utils.convert.steps_to_bitstream(steps)
-        
+
         # 2. Synchronize moves to beat times
         utils.convert.steps_to_bitstream(steps, beat_times)
 

@@ -16,7 +16,7 @@ test1.hold([0, 0, 0, 0, 0, 0, 1, 0], 1)
 test1.hold([0, 0, 0, 0, 0, 0, 0, 1], 1)
 
 # Test blinking
-DURATION = 5 # [sec]
+DURATION = 5  # [sec]
 test2 = Light()
 test2.blink([1] * 8, DURATION, 1)
 test2.blink([1] * 8, DURATION, 2)

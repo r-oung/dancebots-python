@@ -4,7 +4,6 @@
 """
 import wave
 import struct
-from itertools import cycle
 
 
 def load(filename):
@@ -13,6 +12,7 @@ def load(filename):
     Attributes:
             filename: Path to audio file.
     """
+    # pylint: disable=C0415
     import librosa
 
     # Load audio file without any modifications to the sampling rate
@@ -24,6 +24,7 @@ def load(filename):
         )
     )
     return audio, sample_rate
+
 
 def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
     """Create wave-file from time-series data.

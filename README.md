@@ -1,15 +1,33 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Dancebots Python
-A Python 3 package for [Dancebots](https://www.dancebots.ch/).
+A Python 3 package for [Dancebots](https://www.dancebots.ch/) 🤖.
 
 
-## Setup
-If you are downloading from source:
+## Installation
+To build from source:
 ```shell
-cd dancebots-python/
-pip install -e .
+python setup.py build
+python setup.py install
 ```
+
+Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
+```shell
+unzip dancebots-python.zip
+pip install -e dancebots-python
+```
+
+or
+
+```shell
+git clone https://github.com/r-oung/dancebots-python.git
+pip install -e dancebots-python/
+```
+
+### Dependencies
+The package uses [librosa](https://github.com/librosa/librosa) for reading MP3 files and beat detection, which means:
+- If you don't plan to synchronize your compositions with music, then there shouldn't be any problem. 
+- If you are going to synchronize your compomsition with music, then you'll need to install [ffmpeg](https://www.ffmpeg.org/) or [gstreamer](https://gstreamer.freedesktop.org/). Refer to [this link](https://github.com/librosa/librosa#hints-for-the-installation) for installation hints.
 
 
 ## Example
@@ -37,8 +55,9 @@ More examples can be found in the `examples` folder.
 
 
 ## Protocol Description
-A frame is the smallest unit in the Dancebot protocol. It contains all of the information necessary to drive the motors and LEDs. It consists of 24-bits:
+A frame is the smallest unit in the Dancebot protocol. It contains all of the information necessary to drive the motors and LEDs. It consists of 3 bytes (or 24-bits):
 ```
+[ -------------- FRAME -------------- ]
 [ LEFT MOTOR | RIGHT MOTOR | LEDS     ]
 [ 8-bits     | 8-bits      | 8-bits   ]
 ```
@@ -54,6 +73,9 @@ Bits 0-6 are for speed with LSB sent first; only decimal values of 0 to 100 are 
   - Backward: 0
 
 Frames are concatenated one after another, separated by a delimiter block, to form a bitstream.
+```
+[ FRAME ][ DELIMITER ][ FRAME ][ DELIMITER ] ... [ FRAME ][ DELIMITER ]
+```
 
 Bit representation is time-modulated (time between rising/falling edges) as follows:
 | Type      | Ticks       | Interval (msec)     |
@@ -62,7 +84,7 @@ Bit representation is time-modulated (time between rising/falling edges) as foll
 |     1     | 3367 - 5805 | 0.420875 - 0.725625 |
 |     0     |      < 3367 |          < 0.420875 |
 
-where 1 tick represents one period of the microcontroller's clock, which in this case is 1/(8 MHz). Note that there is a built-in watchdog timer that needs to be kicked every < 500 msec, otherwise the motors will automatically turn off.
+where 1 tick represents one period of the microcontroller's clock, which in this case is 1/(8 MHz). Note that there is a built-in watchdog timer that needs to be kicked every < 500 milliseconds, otherwise the motors will automatically turn off.
 
 The following bit representation is used in this package:
 | TYPE      | Interval (msec) |

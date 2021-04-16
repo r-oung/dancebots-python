@@ -35,9 +35,6 @@ class Move:
         if direction not in (self._FORWARD, self._BACKWARD):
             raise ValueError("Direction must be either 0 or 1")
 
-        # Normalize speed
-        speed_norm = int(round(speed * 127.0 / 100.0))
-
         # Convert decimal to binary list, with LSB first
         binary_list = [0] * 8
         binary_value = str(bin(speed)[2:])

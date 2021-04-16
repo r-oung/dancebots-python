@@ -33,27 +33,29 @@ def steps_to_bitstream(steps, beat_times=None, sample_rate=44100):
     while (len(bitstream) / float(sample_rate)) < beat_times[0]:
         frame = Frame([0] * 8, [0] * 8, [0] * 8)
         bitstream += Bitstream([frame])
-    
+
     # Insert steps that are synchronized to beats
     beat_index = 1
     end_step = beat_times[0]
     for step in steps:
         if beat_index < len(beat_times):
             # Estimate when step should end
-            end_step += step.num_units * (beat_times[beat_index] - beat_times[beat_index - 1])
-            
+            end_step += step.num_units * (
+                beat_times[beat_index] - beat_times[beat_index - 1]
+            )
+
             # Insert step
             while (len(bitstream) / float(sample_rate)) < end_step:
                 frame = Frame(step.motor_l, step.motor_r, step.leds)
                 bitstream += Bitstream([frame], sample_rate)
-            
+
             # Check if beat index should be incremented
             if (len(bitstream) / float(sample_rate)) > beat_times[beat_index]:
                 beat_index += 1
         else:
             # No more beats
             break
-    
+
     return bitstream.bits
 
 
