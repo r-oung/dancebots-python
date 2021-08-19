@@ -37,7 +37,7 @@ class Move:
 
         # Convert decimal to binary list, with LSB first
         binary_list = [0] * 8
-        binary_value = str(bin(speed)[2:])
+        binary_value = str(bin(speed)[2:]) # remove '0b'
         for i, bit in enumerate(reversed(binary_value)):
             binary_list[i] = int(bit)
 

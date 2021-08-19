@@ -54,12 +54,18 @@ def create_wav(channel_l, channel_r, filename="output.wav", sample_rate=44100):
         # So we multiply each bit by 32767 to get the maximum value
         binary_list = []
         for i, _ in enumerate(channel_l):
+            # Transform data [0, 1]
+            # Note: This doesn't mean the audio signal goes from 0 to 1. Instead, the audio signal peak-to-peak voltage is halved
+            data = channel_r[i] > 0
+            if data < 0:
+                data = 0
+
             # left-channel
             binary_data = struct.pack("h", int(channel_l[i] * 32767.0))
             binary_list.append(binary_data)
 
             # right-channel
-            binary_data = struct.pack("h", int(channel_r[i] * 32767.0))
+            binary_data = struct.pack("h", int(data * 32767.0))
             binary_list.append(binary_data)
 
         binary_string = b"".join(binary_list)

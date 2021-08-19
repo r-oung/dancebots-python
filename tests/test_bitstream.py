@@ -68,6 +68,35 @@ class TestBitstream(unittest.TestCase):
         bitstream = Bitstream([self.frame1])
         print(bitstream)
 
+    def test_length(self):
+        frame = Frame(
+            [0, 0, 1, 0, 0, 1, 1, 1],
+            [0, 0, 1, 0, 0, 1, 1, 1],
+            [0] * 8)
+        bitstream = Bitstream([frame, frame])
+        self.assertEqual(len(bitstream), 848)
+
+        frame = Frame(
+            [0, 0, 1, 0, 0, 1, 1, 0],
+            [0, 0, 1, 0, 0, 1, 1, 0],
+            [0] * 8)
+        bitstream = Bitstream([frame, frame])
+        self.assertEqual(len(bitstream), 776)
+
+        frame = Frame(
+            [0, 0, 1, 0, 0, 1, 1, 0],
+            [0, 0, 1, 0, 0, 1, 1, 1],
+            [0] * 8)
+        bitstream = Bitstream([frame, frame])
+        self.assertEqual(len(bitstream), 812)
+
+        frame = Frame(
+            [0, 0, 1, 0, 0, 1, 1, 1],
+            [0, 0, 1, 0, 0, 1, 1, 0],
+            [0] * 8)
+        bitstream = Bitstream([frame, frame])
+        self.assertEqual(len(bitstream), 812)
+
 
 if __name__ == "__main__":
     unittest.main()
