@@ -5,30 +5,21 @@ A Python 3 package for [Dancebots](https://www.dancebots.ch/) 🕺💃🤖.🎉�
 
 
 ## Installation
+```shell
+git clone https://github.com/r-oung/dancebots-python.git
+pip install -e dancebots-python/
+```
+
 To build from source:
 ```shell
 python setup.py build
 python setup.py install
 ```
 
-Alternatively, you can download or clone the repository and use `pip` to handle dependencies:
-```shell
-unzip dancebots-python.zip
-pip install -e dancebots-python
-```
-
-or
-
-```shell
-git clone https://github.com/r-oung/dancebots-python.git
-pip install -e dancebots-python/
-```
-
-
 ### Dependencies
 The package uses [librosa](https://github.com/librosa/librosa) for reading MP3 files and beat detection, which means:
 - If you don't plan to synchronize your compositions with music, then there shouldn't be any problem. 
-- If you're going to synchronize your composition with music, then you'll need to install [ffmpeg](https://www.ffmpeg.org/) or [gstreamer](https://gstreamer.freedesktop.org/). Refer to [this link](https://github.com/librosa/librosa#hints-for-the-installation) for installation hints.
+- If you are going to synchronize your composition with music, then you'll need to install [ffmpeg](https://www.ffmpeg.org/) or [gstreamer](https://gstreamer.freedesktop.org/). Refer to [this link](https://github.com/librosa/librosa#hints-for-the-installation) for installation hints.
 
 
 ## Example
@@ -101,6 +92,7 @@ The following (default configurations) are used:
 - [Pylint](https://pylint.org/)
 
 [Semantic versioning](https://semver.org/) is used.
+
 
 ### Unit Tests
 ```shell
