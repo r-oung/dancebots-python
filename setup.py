@@ -18,10 +18,10 @@ setup(
     url="https://github.com/r-oung/dancebots-python",
     author="Raymond Oung",
     author_email="raymond.oung@alumni.ethz.ch",
-    license="MIT",
-    keywords="robot education STEM",
+    license="GNU GPLv3",
+    keywords="robot education STEM dancebots",
     classifiers=[
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GNU GPLv3",
         "Programming Language :: Python :: 3.6",
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
