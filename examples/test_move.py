@@ -23,4 +23,5 @@ test2.forward(DURATION)
 # Build audio file
 db.add(test1)
 db.add(test2)
-db.save("test_move.wav")
+db.save("test_move_l.wav", audio_channel="left") # normal
+# db.save("test_move_r.wav", audio_channel="right")
